@@ -57,6 +57,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
     setCustomer((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleInvalid = (e: React.FormEvent<HTMLInputElement>) => {
+    (e.target as HTMLInputElement).setCustomValidity('Por favor, preencha este campo.');
+  };
+
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    (e.target as HTMLInputElement).setCustomValidity('');
+  };
+
   const handleCepChange = async (value: string) => {
     handleInputChange('postalCode', value);
     const cleanCep = value.replace(/\D/g, '');
@@ -311,6 +319,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="text"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       placeholder="Nome completo do titular"
                       value={customer.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
@@ -323,6 +333,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="date"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       value={customer.birthDate}
                       onChange={(e) => handleInputChange('birthDate', e.target.value)}
                       style={inputStyle}
@@ -334,6 +346,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="text"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       placeholder="000.000.000-00"
                       value={customer.cpfCnpj}
                       onChange={(e) => handleInputChange('cpfCnpj', e.target.value)}
@@ -346,6 +360,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="email"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       placeholder="seuemail@exemplo.com"
                       value={customer.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
@@ -358,6 +374,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="tel"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       placeholder="(11) 99999-9999"
                       value={customer.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
@@ -393,6 +411,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <input
                       type="text"
                       required
+                      onInvalid={handleInvalid}
+                      onInput={handleInput}
                       placeholder="Ex: 123"
                       value={customer.addressNumber}
                       onChange={(e) => handleInputChange('addressNumber', e.target.value)}
@@ -486,6 +506,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                         <input
                           type="text"
                           required
+                          onInvalid={handleInvalid}
+                          onInput={handleInput}
                           placeholder="0000 0000 0000 0000"
                           value={creditCard.number}
                           onChange={(e) => handleCardChange('number', e.target.value)}
@@ -497,6 +519,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                         <input
                           type="text"
                           required
+                          onInvalid={handleInvalid}
+                          onInput={handleInput}
                           placeholder="COMO ESTÁ NO CARTÃO"
                           value={creditCard.holderName}
                           onChange={(e) => handleCardChange('holderName', e.target.value)}
@@ -509,6 +533,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                           <input
                             type="text"
                             required
+                            onInvalid={handleInvalid}
+                            onInput={handleInput}
                             maxLength={2}
                             placeholder="MM"
                             value={creditCard.expiryMonth}
@@ -518,6 +544,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                           <input
                             type="text"
                             required
+                            onInvalid={handleInvalid}
+                            onInput={handleInput}
                             maxLength={4}
                             placeholder="AAAA"
                             value={creditCard.expiryYear}
@@ -531,6 +559,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                         <input
                           type="text"
                           required
+                          onInvalid={handleInvalid}
+                          onInput={handleInput}
                           maxLength={4}
                           placeholder="123"
                           value={creditCard.ccv}
