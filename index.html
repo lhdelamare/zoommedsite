@@ -1,0 +1,3011 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Zoommed — assinatura de saúde digital com atendimento médico online 24 horas por dia, 7 dias por semana." />
+  <meta name="theme-color" content="#003e8b" />
+  <title>Zoommed | Médico online 24h</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue-950: #001d42;
+      --blue-900: #002b62;
+      --blue-800: #003e8b;
+      --blue-700: #0752a8;
+      --cyan-500: #20d5e9;
+      --cyan-300: #70edf6;
+      --coral-500: #ff5b3f;
+      --coral-400: #ff735b;
+      --ice: #f3f7fb;
+      --ice-2: #eaf1f7;
+      --white: #ffffff;
+      --ink: #0c2f54;
+      --muted: #5e738b;
+      --line: rgba(10, 59, 108, 0.12);
+      --shadow: 0 24px 80px rgba(0, 39, 90, 0.14);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --container: min(1180px, calc(100vw - 48px));
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.menu-open { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    ::selection { background: var(--cyan-300); color: var(--blue-950); }
+
+    .container { width: var(--container); margin-inline: auto; }
+    .section { position: relative; padding: 112px 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: var(--blue-700);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      border-radius: 99px;
+      background: var(--cyan-500);
+    }
+    .display {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(42px, 6vw, 86px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .title {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -.045em;
+    }
+    .lead {
+      margin: 22px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: clamp(17px, 1.6vw, 21px);
+      line-height: 1.65;
+    }
+    .accent { color: var(--cyan-500); }
+    .coral { color: var(--coral-500); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 0 22px;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .btn:hover { transform: translateY(-3px); }
+    .btn-primary {
+      color: var(--white);
+      background: var(--coral-500);
+      box-shadow: 0 14px 30px rgba(255, 91, 63, .28);
+    }
+    .btn-primary:hover { background: var(--coral-400); box-shadow: 0 18px 38px rgba(255, 91, 63, .38); }
+    .btn-secondary {
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.26);
+      background: rgba(255,255,255,.09);
+      backdrop-filter: blur(10px);
+    }
+    .btn svg { width: 18px; height: 18px; }
+
+    /* Progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      width: 100%;
+      height: 3px;
+      transform-origin: left;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, var(--cyan-500), var(--coral-500));
+    }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      z-index: 100;
+      width: 100%;
+      transition: top .3s ease;
+    }
+    .nav-shell {
+      width: min(1220px, calc(100vw - 30px));
+      min-height: 68px;
+      margin-inline: auto;
+      padding: 10px 12px 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 999px;
+      background: rgba(0, 42, 94, .68);
+      box-shadow: 0 16px 50px rgba(0, 20, 48, .18);
+      backdrop-filter: blur(18px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 145px;
+    }
+    .brand img {
+      width: 126px;
+      height: auto;
+      image-rendering: auto;
+    }
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      color: rgba(255,255,255,.86);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .desktop-nav a { position: relative; }
+    .desktop-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -7px;
+      width: 100%;
+      height: 2px;
+      border-radius: 99px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .25s ease;
+      background: var(--cyan-500);
+    }
+    .desktop-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .nav-actions .btn { min-height: 46px; padding-inline: 18px; font-size: 13px; }
+    .menu-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      color: white;
+      background: rgba(255,255,255,.1);
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 74% 18%, rgba(32,213,233,.22), transparent 25%),
+        radial-gradient(circle at 12% 82%, rgba(67,115,255,.22), transparent 28%),
+        linear-gradient(135deg, var(--blue-950), var(--blue-800) 56%, #014da0);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .32;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .orb-1 {
+      width: 480px; height: 480px; right: -170px; top: 14%;
+      background: radial-gradient(circle at 30% 30%, rgba(32,213,233,.55), rgba(32,213,233,0) 65%);
+    }
+    .orb-2 {
+      width: 320px; height: 320px; left: -100px; bottom: -120px;
+      background: radial-gradient(circle at 40% 40%, rgba(73,112,255,.35), rgba(73,112,255,0) 68%);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: var(--container);
+      margin-inline: auto;
+      padding: 138px 0 74px;
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      align-items: center;
+      gap: 54px;
+    }
+    .hero-copy { max-width: 660px; }
+    .hero .eyebrow {
+      color: var(--cyan-300);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      padding: 9px 14px;
+      letter-spacing: .1em;
+    }
+    .hero .eyebrow::before { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 0 6px rgba(32,213,233,.12); }
+    .hero-title {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(50px, 6.8vw, 96px);
+      line-height: .95;
+      letter-spacing: -.065em;
+    }
+    .hero-title span {
+      display: block;
+      color: var(--cyan-500);
+    }
+    .hero-text {
+      max-width: 630px;
+      margin: 26px 0 0;
+      color: rgba(255,255,255,.76);
+      font-size: clamp(17px, 1.7vw, 21px);
+      line-height: 1.65;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 30px;
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .proof-item { display: flex; align-items: center; gap: 8px; }
+    .proof-item i {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--cyan-500);
+      box-shadow: 0 0 0 5px rgba(32,213,233,.1);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 620px;
+      perspective: 1400px;
+    }
+    .human-card {
+      position: absolute;
+      inset: 36px 0 52px 120px;
+      overflow: hidden;
+      border-radius: 42px;
+      box-shadow: 0 40px 100px rgba(0, 19, 50, .44);
+      transform: rotateY(-8deg) rotateX(2deg);
+      transform-style: preserve-3d;
+    }
+    .human-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,29,66,.72));
+    }
+    .human-card img { width: 100%; height: 100%; object-fit: cover; }
+    .human-caption {
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .human-caption strong { display: block; font-size: 20px; }
+    .human-caption span { color: rgba(255,255,255,.72); font-size: 13px; }
+
+    .phone-wrap {
+      position: absolute;
+      z-index: 4;
+      left: 8px;
+      bottom: 4px;
+      width: 268px;
+      transform: rotateY(12deg) rotateZ(-4deg);
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 30px 40px rgba(0,15,40,.42));
+    }
+    .phone {
+      position: relative;
+      aspect-ratio: 9/18.5;
+      padding: 10px;
+      border: 2px solid rgba(255,255,255,.65);
+      border-radius: 42px;
+      background: #06152b;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.06);
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 10px;
+      left: 50%;
+      width: 92px;
+      height: 24px;
+      transform: translateX(-50%);
+      border-radius: 0 0 16px 16px;
+      background: #06152b;
+    }
+    .phone-screen {
+      height: 100%;
+      overflow: hidden;
+      border-radius: 32px;
+      color: var(--ink);
+      background: linear-gradient(180deg, #ecfdff, #ffffff 35%);
+    }
+    .app-top {
+      padding: 42px 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--blue-800);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .app-avatar {
+      width: 34px; height: 34px; overflow: hidden; border-radius: 50%;
+      border: 2px solid var(--cyan-500);
+    }
+    .app-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .app-body { padding: 4px 16px 16px; }
+    .app-greeting { font-size: 11px; color: var(--muted); }
+    .app-title { margin-top: 4px; font-family: "Manrope", sans-serif; font-size: 20px; line-height: 1.05; color: var(--blue-900); }
+    .doctor-call {
+      position: relative;
+      margin-top: 14px;
+      aspect-ratio: 1.22;
+      overflow: hidden;
+      border-radius: 20px;
+      background: var(--blue-800);
+    }
+    .doctor-call > img { width: 100%; height: 100%; object-fit: cover; }
+    .doctor-call::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,29,66,.7));
+    }
+    .call-status {
+      position: absolute; z-index: 2; left: 12px; bottom: 10px;
+      color: white; font-size: 10px; font-weight: 800;
+    }
+    .call-dots {
+      position: absolute; z-index: 2; right: 10px; bottom: 9px;
+      display: flex; gap: 5px;
+    }
+    .call-dots b { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.9); color: var(--blue-900); font-size: 8px; }
+    .app-quick { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+    .quick-card {
+      padding: 11px 9px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      font-size: 9px;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(0,62,139,.07);
+    }
+    .quick-card span { display: block; color: var(--cyan-500); font-size: 15px; margin-bottom: 4px; }
+
+    .floating-badge {
+      position: absolute;
+      z-index: 7;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
+      color: white;
+      background: rgba(0,45,99,.74);
+      box-shadow: 0 18px 44px rgba(0,20,50,.24);
+      backdrop-filter: blur(16px);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .floating-badge svg { width: 20px; color: var(--cyan-500); }
+    .badge-1 { right: -14px; top: 88px; }
+    .badge-2 { right: 20px; bottom: 30px; }
+    .badge-3 { left: 50px; top: 36px; }
+    .badge-3 b {
+      display: grid; place-items: center; width: 34px; height: 34px;
+      border-radius: 12px; color: var(--blue-950); background: var(--cyan-500);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,.56);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .mouse {
+      width: 22px; height: 34px; border: 1px solid rgba(255,255,255,.45); border-radius: 999px;
+    }
+    .mouse::after {
+      content: "";
+      display: block;
+      width: 3px; height: 6px;
+      margin: 7px auto;
+      border-radius: 999px;
+      background: var(--cyan-500);
+      animation: wheel 1.7s infinite;
+    }
+    @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(10px); opacity: 0; } }
+
+    /* Trust strip */
+    .trust-strip {
+      position: relative;
+      z-index: 5;
+      margin-top: -1px;
+      color: white;
+      background: var(--blue-950);
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .trust-grid {
+      min-height: 102px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 22px;
+      border-right: 1px solid rgba(255,255,255,.09);
+      text-align: left;
+    }
+    .trust-item:last-child { border-right: 0; }
+    .trust-icon {
+      flex: 0 0 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--cyan-500);
+      background: rgba(32,213,233,.1);
+    }
+    .trust-item strong { display: block; font-size: 15px; }
+    .trust-item span { display: block; margin-top: 2px; color: rgba(255,255,255,.58); font-size: 11px; }
+
+    /* Manifesto */
+    .manifesto { overflow: hidden; background: var(--white); }
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 70px;
+      align-items: start;
+    }
+    .manifesto-copy { position: sticky; top: 130px; }
+    .scenario-list { display: grid; gap: 18px; }
+    .scenario {
+      position: relative;
+      min-height: 210px;
+      overflow: hidden;
+      padding: 32px;
+      display: flex;
+      align-items: flex-end;
+      border-radius: var(--radius-xl);
+      color: white;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+    .scenario::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background-size: cover;
+      background-position: center;
+      transition: transform .7s ease;
+    }
+    .scenario::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(0,29,66,.92), rgba(0,29,66,.18));
+    }
+    .scenario:hover::before { transform: scale(1.05); }
+    .scenario:nth-child(1)::before { background-image: url("./assets/images/img_4169247967.png"); }
+    .scenario:nth-child(2)::before { background-image: url("./assets/images/img_69b93b5140.png"); }
+    .scenario:nth-child(3)::before { background-image: url("./assets/images/img_5efd216390.png"); }
+    .scenario-index {
+      position: absolute;
+      top: 24px; right: 26px;
+      color: rgba(255,255,255,.52);
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+    }
+    .scenario h3 { margin: 0; max-width: 520px; font-family: "Manrope", sans-serif; font-size: clamp(24px, 3vw, 38px); letter-spacing: -.04em; }
+    .scenario p { margin: 10px 0 0; max-width: 560px; color: rgba(255,255,255,.74); line-height: 1.55; }
+
+    /* How */
+    .how {
+      color: white;
+      overflow: clip;
+      background: linear-gradient(135deg, var(--blue-950), var(--blue-800));
+    }
+    .how::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .18;
+      background: radial-gradient(circle at 24% 70%, var(--cyan-500), transparent 24%);
+    }
+    .how-head { max-width: 860px; margin-bottom: 62px; }
+    .how .eyebrow { color: var(--cyan-300); }
+    .how .lead { color: rgba(255,255,255,.68); }
+    .how-grid {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 70px;
+      align-items: start;
+    }
+    .how-phone-stage {
+      position: sticky;
+      top: 130px;
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+    }
+    .how-phone-stage::before {
+      content: "";
+      position: absolute;
+      width: 470px; height: 470px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(32,213,233,.25), rgba(32,213,233,0) 68%);
+    }
+    .how-device {
+      position: relative;
+      z-index: 2;
+      width: 310px;
+      aspect-ratio: 9/18.2;
+      padding: 11px;
+      border-radius: 48px;
+      border: 2px solid rgba(255,255,255,.58);
+      background: #06152b;
+      box-shadow: 0 55px 100px rgba(0,14,35,.5);
+      transform: rotateY(-10deg) rotateX(3deg);
+      transition: transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    .how-device::before {
+      content: "";
+      position: absolute; z-index: 5; top: 10px; left: 50%;
+      width: 102px; height: 25px; transform: translateX(-50%);
+      border-radius: 0 0 18px 18px; background: #06152b;
+    }
+    .how-screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 36px;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eafcff, white 34%);
+    }
+    .screen-state {
+      position: absolute;
+      inset: 0;
+      padding: 46px 19px 20px;
+      opacity: 0;
+      transform: translateY(30px) scale(.98);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .screen-state.active { opacity: 1; transform: translateY(0) scale(1); }
+    .screen-kicker { color: var(--blue-700); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .11em; }
+    .screen-title { margin: 9px 0 0; font-family: "Manrope", sans-serif; font-size: 23px; line-height: 1.08; letter-spacing: -.04em; }
+    .screen-sub { margin: 9px 0 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .screen-panel {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 14px 32px rgba(0,62,139,.09);
+    }
+    .screen-plan {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 12px; margin-bottom: 9px; border-radius: 14px; background: var(--ice);
+    }
+    .screen-plan.active { color: white; background: var(--blue-800); }
+    .screen-plan b { font-size: 11px; }
+    .screen-plan span { font-size: 10px; font-weight: 800; }
+    .fake-button {
+      margin-top: 14px;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: white;
+      background: var(--coral-500);
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .doctor-list { display: grid; gap: 9px; margin-top: 14px; }
+    .doctor-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px; border: 1px solid var(--line); border-radius: 15px; background: white;
+    }
+    .doctor-row img { width: 42px; height: 42px; object-fit: cover; border-radius: 13px; }
+    .doctor-row b { display: block; font-size: 10px; }
+    .doctor-row small { color: var(--muted); font-size: 9px; }
+    .video-frame {
+      position: relative;
+      margin-top: 17px;
+      aspect-ratio: 1 / 1.15;
+      overflow: hidden;
+      border-radius: 20px;
+      background: var(--blue-800);
+    }
+    .video-frame img { width: 100%; height: 100%; object-fit: cover; }
+    .video-frame::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, rgba(0,29,66,.82)); }
+    .video-note { position:absolute; z-index:2; left:12px; bottom:12px; color:white; font-size:10px; font-weight:800; }
+    .video-controls { position:absolute; z-index:2; right:12px; bottom:10px; display:flex; gap:6px; }
+    .video-controls i { width:25px; height:25px; border-radius:50%; background:white; }
+
+    .steps { display: grid; }
+    .step {
+      min-height: 64vh;
+      padding: 40px 0 70px;
+      border-top: 1px solid rgba(255,255,255,.13);
+      opacity: .48;
+      transition: opacity .35s ease;
+    }
+    .step.active { opacity: 1; }
+    .step-number {
+      display: inline-grid;
+      place-items: center;
+      width: 46px; height: 46px;
+      border-radius: 15px;
+      color: var(--blue-950);
+      background: var(--cyan-500);
+      font-family: "Manrope", sans-serif;
+      font-weight: 800;
+    }
+    .step h3 { margin: 24px 0 0; font-family: "Manrope", sans-serif; font-size: clamp(30px, 4vw, 54px); line-height: 1.02; letter-spacing: -.05em; }
+    .step p { margin: 18px 0 0; max-width: 560px; color: rgba(255,255,255,.68); font-size: 18px; line-height: 1.65; }
+    .step ul { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .step li { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.82); font-weight: 700; }
+    .step li::before { content:"✓"; color: var(--cyan-500); }
+
+    /* Bento */
+    .ecosystem { background: var(--ice); }
+    .ecosystem-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 46px; }
+    .ecosystem-head .lead { max-width: 500px; }
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 245px;
+      gap: 18px;
+    }
+    .bento-card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid rgba(0,62,139,.1);
+      border-radius: var(--radius-lg);
+      background: white;
+      box-shadow: 0 18px 50px rgba(0,48,104,.07);
+    }
+    .bento-card h3 { margin: 0; font-family: "Manrope", sans-serif; font-size: 24px; letter-spacing: -.04em; }
+    .bento-card p { margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
+    .bento-icon {
+      width: 48px; height: 48px; margin-bottom: 22px;
+      display: grid; place-items: center;
+      border-radius: 16px;
+      color: var(--blue-800);
+      background: rgba(32,213,233,.16);
+    }
+    .bento-icon svg { width: 24px; height: 24px; }
+    .b1 { grid-column: span 7; grid-row: span 2; padding: 0; color: white; }
+    .b1 img { width: 100%; height: 100%; object-fit: cover; }
+    .b1::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 25%, rgba(0,29,66,.92)); }
+    .b1 .bento-content { position:absolute; z-index:2; left:32px; right:32px; bottom:32px; }
+    .b1 p { color: rgba(255,255,255,.72); max-width: 560px; }
+    .b2 { grid-column: span 5; }
+    .b3 { grid-column: span 5; color: white; background: linear-gradient(135deg, var(--blue-800), var(--blue-950)); }
+    .b3 p { color: rgba(255,255,255,.68); }
+    .b4 { grid-column: span 4; }
+    .b5 { grid-column: span 4; }
+    .b6 { grid-column: span 4; }
+    .metric {
+      position: absolute;
+      right: 26px; bottom: 22px;
+      font-family: "Manrope", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -.06em;
+      color: rgba(0,62,139,.12);
+    }
+    .b3 .metric { color: rgba(255,255,255,.16); }
+
+    /* Serviços inclusos */
+    .services-showcase {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+    .service-card {
+      position: relative;
+      min-height: 510px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 62, 139, .1);
+      border-radius: 30px;
+      background: var(--white);
+      box-shadow: 0 22px 64px rgba(0, 48, 104, .09);
+      transition: transform .35s ease, box-shadow .35s ease;
+      transform-style: preserve-3d;
+    }
+    .service-card:hover {
+      box-shadow: 0 30px 76px rgba(0, 48, 104, .15);
+    }
+    .service-card--wide { grid-column: span 7; }
+    .service-card--narrow { grid-column: span 5; }
+    .service-visual {
+      position: relative;
+      height: 272px;
+      overflow: hidden;
+      background: var(--blue-900);
+    }
+    .service-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0, 29, 66, .02) 35%, rgba(0, 29, 66, .66) 100%),
+        linear-gradient(110deg, rgba(0, 62, 139, .22), transparent 52%);
+    }
+    .service-card--tech .service-visual::after {
+      background:
+        linear-gradient(180deg, rgba(0, 29, 66, .06), rgba(0, 29, 66, .68)),
+        linear-gradient(120deg, rgba(32, 213, 233, .26), transparent 55%);
+    }
+    .service-card--club .service-visual::after {
+      background:
+        linear-gradient(180deg, rgba(0, 29, 66, .02), rgba(0, 29, 66, .7)),
+        linear-gradient(120deg, rgba(91, 56, 196, .18), transparent 55%);
+    }
+    .service-card--mind .service-visual::after {
+      background:
+        linear-gradient(180deg, rgba(0, 29, 66, .02), rgba(0, 29, 66, .7)),
+        linear-gradient(120deg, rgba(255, 91, 63, .15), transparent 58%);
+    }
+    .service-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .75s cubic-bezier(.2, .8, .2, 1);
+    }
+    .service-card:hover .service-visual img { transform: scale(1.055); }
+    .service-chip {
+      position: absolute;
+      z-index: 2;
+      top: 20px;
+      left: 20px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 999px;
+      color: var(--white);
+      background: rgba(0, 43, 98, .55);
+      backdrop-filter: blur(12px);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .service-symbol {
+      position: absolute;
+      z-index: 2;
+      right: 20px;
+      bottom: 20px;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 18px;
+      color: var(--blue-950);
+      background: rgba(112, 237, 246, .92);
+      box-shadow: 0 14px 28px rgba(0, 29, 66, .22);
+      backdrop-filter: blur(12px);
+    }
+    .service-symbol svg { width: 27px; height: 27px; }
+    .service-body {
+      position: relative;
+      padding: 28px 30px 30px;
+    }
+    .service-number {
+      position: absolute;
+      right: 28px;
+      top: 24px;
+      font-family: "Manrope", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -.08em;
+      color: rgba(0, 62, 139, .09);
+    }
+    .service-kicker {
+      display: block;
+      max-width: calc(100% - 82px);
+      color: var(--cyan-500);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .service-body h3 {
+      margin: 8px 0 0;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(24px, 2.5vw, 34px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      color: var(--blue-900);
+    }
+    .service-body p {
+      margin: 14px 0 0;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .service-highlights {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .service-highlights span {
+      padding: 8px 11px;
+      border: 1px solid rgba(0, 62, 139, .09);
+      border-radius: 999px;
+      color: var(--blue-700);
+      background: var(--ice);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .services-note {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* Specialists */
+    .specialists { overflow: hidden; color: white; background: var(--blue-950); }
+    .specialists .eyebrow { color: var(--cyan-300); }
+    .specialists .lead { color: rgba(255,255,255,.66); }
+    .marquee {
+      margin-top: 50px;
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,.1);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .marquee-track {
+      width: max-content;
+      padding: 20px 0;
+      display: flex;
+      gap: 16px;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .specialty-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.06);
+      white-space: nowrap;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .specialty-pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-500); }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    .doctor-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .doctor-card {
+      position: relative;
+      min-height: 450px;
+      overflow: hidden;
+      border-radius: 28px;
+      background: var(--blue-800);
+    }
+    .doctor-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .doctor-card:hover img { transform: scale(1.04); }
+    .doctor-card::after {
+      content:""; position:absolute; inset:0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,29,66,.92));
+    }
+    .doctor-info { position:absolute; z-index:2; left:24px; right:24px; bottom:24px; }
+    .doctor-info strong { font-family: "Manrope", sans-serif; font-size:22px; }
+    .doctor-info span { display:block; margin-top:5px; color:var(--cyan-300); font-size:13px; font-weight:800; }
+
+    /* Audience */
+    .audience { overflow: hidden; }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 62px;
+      align-items: center;
+    }
+    .audience-visual { position: relative; min-height: 650px; }
+    .audience-main {
+      position: absolute; inset: 0 70px 40px 0;
+      overflow: hidden;
+      border-radius: 38px;
+      box-shadow: var(--shadow);
+    }
+    .audience-main img { width: 100%; height: 100%; object-fit: cover; }
+    .audience-small {
+      position: absolute;
+      right: 0; bottom: 0;
+      width: 48%; height: 45%;
+      overflow: hidden;
+      border: 10px solid white;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+    }
+    .audience-small img { width:100%; height:100%; object-fit:cover; }
+    .audience-stamp {
+      position: absolute; right: 22px; top: 30px;
+      width: 130px; height: 130px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--coral-500);
+      box-shadow: 0 20px 50px rgba(255,91,63,.28);
+      transform: rotate(8deg);
+      text-align: center;
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      line-height: 1.15;
+    }
+    .audience-list { margin-top: 34px; display: grid; gap: 13px; }
+    .audience-item {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .audience-item:hover { transform: translateX(8px); box-shadow: 0 15px 34px rgba(0,48,104,.08); }
+    .audience-item b {
+      width: 34px; height: 34px; display:grid; place-items:center;
+      flex: 0 0 34px;
+      border-radius: 11px;
+      color: var(--blue-800);
+      background: rgba(32,213,233,.15);
+    }
+    .audience-item strong { display:block; }
+    .audience-item span { display:block; margin-top:3px; color:var(--muted); font-size:13px; }
+
+
+    /* Audience redesign */
+    .audience {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 22%, rgba(32,213,233,.11), transparent 24%),
+        radial-gradient(circle at 86% 74%, rgba(0,62,139,.08), transparent 24%),
+        linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    }
+    .audience-shell { position: relative; z-index: 2; }
+    .audience-bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(2px);
+      opacity: .9;
+    }
+    .audience-bg-orb--one {
+      width: 320px; height: 320px; left: -120px; top: 120px;
+      background: radial-gradient(circle, rgba(32,213,233,.18), rgba(32,213,233,0) 68%);
+    }
+    .audience-bg-orb--two {
+      width: 420px; height: 420px; right: -140px; bottom: -80px;
+      background: radial-gradient(circle, rgba(0,62,139,.12), rgba(0,62,139,0) 70%);
+    }
+    .audience-intro {
+      max-width: 860px;
+      margin-bottom: 44px;
+    }
+    .audience-grid--new {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 54px;
+      align-items: center;
+    }
+    .audience-stage {
+      position: relative;
+      min-height: 760px;
+    }
+    .audience-stage-panel {
+      position: relative;
+      min-height: 760px;
+      border-radius: 38px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,247,255,.92));
+      border: 1px solid rgba(0,62,139,.08);
+      box-shadow: 0 28px 80px rgba(0,48,104,.10);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+    .audience-stage-main {
+      position: absolute;
+      left: 34px;
+      top: 34px;
+      right: 120px;
+      bottom: 170px;
+      overflow: hidden;
+      border-radius: 34px;
+      box-shadow: 0 22px 70px rgba(0,39,90,.20);
+    }
+    .audience-stage-main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 22%, rgba(0,29,66,.83) 100%),
+        linear-gradient(120deg, rgba(0,62,139,.16), transparent 50%);
+    }
+    .audience-stage-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+    .audience-stage-overlay {
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      color: white;
+    }
+    .audience-stage-overlay strong {
+      display: block;
+      margin-top: 12px;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(26px, 3vw, 40px);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+    }
+    .audience-stage-overlay p {
+      margin: 10px 0 0;
+      max-width: 500px;
+      color: rgba(255,255,255,.76);
+      line-height: 1.6;
+    }
+    .audience-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .audience-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan-500);
+      box-shadow: 0 0 0 6px rgba(32,213,233,.12);
+    }
+    .audience-floating-card {
+      position: absolute;
+      z-index: 3;
+      width: 270px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.44);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 20px 50px rgba(0,48,104,.14);
+      backdrop-filter: blur(14px);
+      animation: floatCard 6.8s ease-in-out infinite;
+    }
+    .audience-floating-card img {
+      width: 78px;
+      height: 78px;
+      object-fit: cover;
+      border-radius: 18px;
+      flex: 0 0 78px;
+    }
+    .audience-floating-card span {
+      display: block;
+      color: var(--cyan-500);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .audience-floating-card strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+      color: var(--blue-900);
+    }
+    .audience-floating-card--top {
+      top: 76px;
+      right: 28px;
+      animation-delay: .2s;
+    }
+    .audience-floating-card--bottom {
+      left: 34px;
+      bottom: 96px;
+      width: 300px;
+      animation-delay: 1s;
+    }
+    .audience-stat-card {
+      position: absolute;
+      right: 34px;
+      bottom: 180px;
+      z-index: 3;
+      max-width: 250px;
+      padding: 18px 18px 20px;
+      border-radius: 24px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue-800), var(--blue-950));
+      box-shadow: 0 18px 42px rgba(0,29,66,.22);
+      animation: floatCard 7.6s ease-in-out infinite;
+      animation-delay: .6s;
+    }
+    .audience-stat-card span {
+      display: block;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .audience-stat-card strong {
+      display: block;
+      margin-top: 10px;
+      font-family: "Manrope", sans-serif;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: -.03em;
+    }
+    .audience-mini-dock {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 28px;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .mini-dock-card {
+      padding: 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,62,139,.08);
+      background: white;
+      box-shadow: 0 14px 28px rgba(0,48,104,.06);
+    }
+    .mini-dock-card b {
+      display: block;
+      color: var(--blue-800);
+      font-family: "Manrope", sans-serif;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .mini-dock-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .audience-copy--new {
+      position: relative;
+    }
+    .audience-list--new {
+      display: grid;
+      gap: 16px;
+      margin-top: 0;
+    }
+    .audience-feature-card {
+      position: relative;
+      padding: 24px 24px 22px;
+      border: 1px solid rgba(0,62,139,.08);
+      border-radius: 24px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 14px 36px rgba(0,48,104,.06);
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    .audience-feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(32,213,233,.28);
+      box-shadow: 0 22px 48px rgba(0,48,104,.11);
+    }
+    .audience-feature-head {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .audience-feature-number {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: var(--blue-950);
+      background: linear-gradient(135deg, var(--cyan-500), var(--cyan-300));
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(32,213,233,.26);
+    }
+    .audience-feature-head strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      color: var(--blue-900);
+    }
+    .audience-feature-head span {
+      display: block;
+      margin-top: 6px;
+      color: var(--cyan-500);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .audience-feature-card p {
+      margin: 16px 0 0 64px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Plans */
+    .plans { background: var(--ice); }
+    .plans-head { display:flex; align-items:end; justify-content:space-between; gap:30px; margin-bottom:42px; }
+    .plan-toggle {
+      display:flex; gap:6px; padding:5px; border-radius:999px; background:white; border:1px solid var(--line);
+    }
+    .toggle-btn {
+      border:0; padding:11px 17px; border-radius:999px; cursor:pointer; color:var(--muted); background:transparent; font-weight:800;
+    }
+    .toggle-btn.active { color:white; background:var(--blue-800); }
+    .plans-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:stretch; }
+    .plan-card {
+      position:relative;
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:white;
+      box-shadow:0 18px 48px rgba(0,48,104,.06);
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .plan-card:hover { transform:translateY(-8px); box-shadow:0 26px 60px rgba(0,48,104,.12); }
+    .plan-card.featured {
+      color:white;
+      background:linear-gradient(155deg, var(--blue-700), var(--blue-950));
+      transform:translateY(-12px);
+      box-shadow:0 30px 70px rgba(0,43,98,.24);
+    }
+    .plan-card.featured:hover { transform:translateY(-18px); }
+    .plan-tag {
+      min-height:24px;
+      display:inline-flex; align-items:center; align-self:flex-start;
+      padding:5px 10px; border-radius:999px; color:var(--blue-800); background:rgba(32,213,233,.16); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.1em;
+    }
+    .featured .plan-tag { color:var(--blue-950); background:var(--cyan-500); }
+    .plan-name { margin:20px 0 0; font-family: "Manrope", sans-serif; font-size:20px; letter-spacing:-.03em; }
+    .plan-audience { margin:5px 0 0; color:var(--muted); font-size:12px; }
+    .featured .plan-audience { color:rgba(255,255,255,.62); }
+    .price { margin:22px 0 0; display:flex; align-items:flex-end; gap:4px; }
+    .price small { margin-bottom:8px; color:var(--muted); font-weight:800; }
+    .price strong { font-family: "Manrope", sans-serif; font-size:46px; letter-spacing:-.07em; line-height:1; }
+    .price span { margin-bottom:6px; color:var(--muted); font-size:12px; font-weight:700; }
+    .featured .price small, .featured .price span { color:rgba(255,255,255,.6); }
+    .plan-list { margin:24px 0 28px; padding:0; list-style:none; display:grid; gap:11px; }
+    .plan-list li { display:flex; gap:9px; color:var(--muted); font-size:13px; line-height:1.45; }
+    .plan-list li::before { content:"✓"; color:var(--cyan-500); font-weight:900; }
+    .featured .plan-list li { color:rgba(255,255,255,.76); }
+    .plan-card .btn { margin-top:auto; width:100%; }
+    .plan-card:not(.featured) .btn { color:var(--blue-800); background:var(--ice); }
+    .plan-note { margin:22px 0 0; color:var(--muted); font-size:12px; text-align:center; }
+
+    /* Testimonials */
+    .testimonials { overflow:hidden; }
+    .testimonials-head { max-width:760px; }
+    .testimonial-track {
+      width:max-content;
+      margin-top:46px;
+      display:flex;
+      gap:18px;
+      animation:testimonials 34s linear infinite;
+    }
+    .testimonial-track:hover { animation-play-state:paused; }
+    @keyframes testimonials { to { transform:translateX(-50%); } }
+    .testimonial-card {
+      width:min(420px, 82vw);
+      padding:28px;
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:white;
+      box-shadow:0 18px 50px rgba(0,48,104,.07);
+    }
+    .stars { color:#ffb52b; letter-spacing:3px; }
+    .testimonial-card p { margin:18px 0 24px; color:var(--muted); font-size:16px; line-height:1.7; }
+    .person { display:flex; align-items:center; gap:12px; }
+    .person img { width:44px; height:44px; object-fit:cover; border-radius:50%; }
+    .person strong { display:block; font-size:14px; }
+    .person span { display:block; margin-top:2px; color:var(--muted); font-size:11px; }
+
+    /* FAQ */
+    .faq { background:var(--ice); }
+    .faq-grid { display:grid; grid-template-columns:.75fr 1.25fr; gap:70px; align-items:start; }
+    .faq-copy { position:sticky; top:130px; }
+    .faq-list { display:grid; gap:10px; }
+    details {
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:white;
+      overflow:hidden;
+    }
+    summary {
+      position:relative;
+      padding:21px 58px 21px 22px;
+      list-style:none;
+      cursor:pointer;
+      font-weight:800;
+    }
+    summary::-webkit-details-marker { display:none; }
+    summary::after {
+      content:"+";
+      position:absolute;
+      right:20px; top:50%;
+      width:28px; height:28px;
+      display:grid; place-items:center;
+      transform:translateY(-50%);
+      border-radius:50%;
+      color:var(--blue-800);
+      background:var(--ice);
+      font-size:19px;
+      transition:transform .25s ease;
+    }
+    details[open] summary::after { transform:translateY(-50%) rotate(45deg); }
+    .faq-answer { padding:0 22px 22px; color:var(--muted); line-height:1.65; }
+
+    /* CTA */
+    .final-cta {
+      padding:100px 0;
+      color:white;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(32,213,233,.28), transparent 25%),
+        linear-gradient(135deg, var(--blue-950), var(--blue-800));
+    }
+    .cta-card {
+      position:relative;
+      min-height:470px;
+      padding:64px;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:40px;
+      background:rgba(255,255,255,.06);
+      backdrop-filter:blur(12px);
+    }
+    .cta-copy { position:relative; z-index:2; max-width:700px; }
+    .cta-copy .title { max-width:760px; }
+    .cta-copy p { max-width:600px; color:rgba(255,255,255,.68); font-size:18px; line-height:1.65; }
+    .cta-art {
+      position:absolute;
+      right:-40px;
+      bottom:-90px;
+      width:430px;
+      height:560px;
+      transform:rotate(13deg);
+      opacity:.9;
+    }
+    .cta-art .how-device { width:100%; height:100%; }
+    .cta-ring {
+      position:absolute;
+      right:220px; top:-120px;
+      width:380px; height:380px; border:1px solid rgba(255,255,255,.1); border-radius:50%;
+      box-shadow:0 0 0 70px rgba(255,255,255,.025), 0 0 0 140px rgba(255,255,255,.02);
+    }
+
+    /* Footer */
+    footer { color:white; background:#00152f; }
+    .footer-grid {
+      padding:62px 0 40px;
+      display:grid;
+      grid-template-columns:1.5fr repeat(3,1fr);
+      gap:50px;
+    }
+    .footer-brand img { width:150px; }
+    .footer-brand p { max-width:330px; color:rgba(255,255,255,.55); font-size:13px; line-height:1.65; }
+    .footer-col h4 { margin:0 0 16px; font-size:13px; }
+    .footer-col a, .footer-col span { display:block; margin:10px 0; color:rgba(255,255,255,.55); font-size:12px; }
+    .footer-bottom {
+      padding:22px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.42);
+      font-size:11px;
+    }
+
+    .mobile-menu {
+      position:fixed;
+      inset:0;
+      z-index:90;
+      padding:112px 28px 30px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      color:white;
+      background:rgba(0,29,66,.98);
+      transform:translateY(-100%);
+      transition:transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .mobile-menu.open { transform:translateY(0); }
+    .mobile-menu a {
+      padding:16px 0;
+      border-bottom:1px solid rgba(255,255,255,.1);
+      font-family: "Manrope", sans-serif;
+      font-size:28px;
+      letter-spacing:-.04em;
+    }
+    .mobile-menu .btn { margin-top:18px; align-self:flex-start; font-family:"Manrope"; font-size:14px; }
+
+    /* Reveal */
+    .reveal { opacity:0; transform:translateY(32px); }
+    .reveal-left { opacity:0; transform:translateX(-40px); }
+    .reveal-right { opacity:0; transform:translateX(40px); }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      :root { --container:min(100% - 36px, 960px); }
+      .desktop-nav { gap:18px; }
+      .hero-inner { grid-template-columns:.95fr 1.05fr; gap:28px; }
+      .hero-visual { min-height:560px; }
+      .human-card { left:85px; }
+      .plans-grid { grid-template-columns:repeat(2,1fr); }
+      .plan-card.featured { transform:none; }
+      .bento { grid-auto-rows:230px; }
+    }
+
+    @media (max-width: 860px) {
+      :root { --container:calc(100vw - 30px); }
+      .section { padding:84px 0; }
+      .desktop-nav, .nav-actions .btn { display:none; }
+      .menu-toggle { display:grid; place-items:center; }
+      .hero { min-height:auto; }
+      .hero-inner { grid-template-columns:1fr; padding-top:128px; gap:30px; }
+      .hero-copy { max-width:760px; }
+      .hero-visual { min-height:650px; max-width:650px; width:100%; margin-inline:auto; }
+      .trust-grid { grid-template-columns:repeat(2,1fr); }
+      .trust-item:nth-child(2) { border-right:0; }
+      .trust-item:nth-child(-n+2) { border-bottom:1px solid rgba(255,255,255,.09); }
+      .manifesto-grid, .faq-grid { grid-template-columns:1fr; gap:42px; }
+      .manifesto-copy, .faq-copy { position:relative; top:0; }
+      .how-grid { grid-template-columns:1fr; }
+      .how-phone-stage { position:relative; top:0; min-height:600px; }
+      .step { min-height:auto; padding:48px 0; opacity:1; }
+      .ecosystem-head, .plans-head { align-items:flex-start; flex-direction:column; }
+      .bento { grid-template-columns:1fr 1fr; grid-auto-rows:auto; }
+      .bento-card { min-height:260px; grid-column:span 1 !important; }
+      .b1 { min-height:500px; }
+      .services-showcase { grid-template-columns: 1fr 1fr; }
+      .service-card { grid-column: span 1 !important; min-height: 500px; }
+      .doctor-grid { grid-template-columns:1fr; }
+      .doctor-card { min-height:520px; }
+      .audience-grid { grid-template-columns:1fr; }
+      .audience-visual { order:2; }
+      .audience-grid--new { grid-template-columns:1fr; gap:36px; }
+      .audience-stage,
+      .audience-stage-panel { min-height: 760px; }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .section { padding:72px 0; }
+      .site-header { top:10px; }
+      .nav-shell { width:calc(100vw - 20px); min-height:62px; }
+      .brand img { width:110px; }
+      .hero-inner { padding-top:112px; padding-bottom:70px; }
+      .hero-title { font-size:clamp(45px, 15vw, 68px); }
+      .hero-text { font-size:16px; }
+      .hero-actions { flex-direction:column; align-items:stretch; }
+      .hero-actions .btn { width:100%; }
+      .hero-proof { gap:12px; }
+      .hero-visual { min-height:570px; }
+      .human-card { inset:35px 0 65px 55px; border-radius:30px; }
+      .human-caption { left:18px; right:18px; bottom:18px; }
+      .human-caption strong { font-size:16px; }
+      .human-caption > span { display:none; }
+      .phone-wrap { width:210px; left:-8px; bottom:12px; }
+      .badge-1 { right:-5px; top:72px; }
+      .badge-2 { right:0; bottom:15px; }
+      .badge-3 { left:10px; top:8px; }
+      .floating-badge { padding:10px 12px; font-size:10px; }
+      .hero-scroll { display:none; }
+      .trust-item { padding:18px 10px; flex-direction:column; text-align:center; }
+      .trust-item span { font-size:10px; }
+      .scenario { min-height:310px; padding:24px; }
+      .how-phone-stage { min-height:540px; }
+      .how-device { width:265px; }
+      .bento { grid-template-columns:1fr; }
+      .b1 { min-height:430px; }
+      .bento-card { min-height:230px; }
+      .services-showcase { grid-template-columns: 1fr; }
+      .service-card { min-height: auto; }
+      .service-visual { height: 235px; }
+      .service-body { padding: 24px; }
+      .service-number { right: 22px; top: 22px; font-size: 36px; }
+      .doctor-card { min-height:450px; }
+      .audience-visual { min-height:520px; }
+      .audience-main { inset:0 34px 40px 0; }
+      .audience-small { width:54%; height:42%; border-width:7px; }
+      .audience-stamp { width:104px; height:104px; right:4px; top:15px; font-size:12px; }
+      .audience-grid--new { gap: 28px; }
+      .audience-stage,
+      .audience-stage-panel { min-height: 760px; }
+      .audience-stage-main { left: 18px; top: 18px; right: 18px; bottom: 240px; border-radius: 28px; }
+      .audience-stage-overlay { left: 20px; right: 20px; bottom: 20px; }
+      .audience-stage-overlay strong { font-size: 28px; }
+      .audience-floating-card { width: calc(100% - 36px); left: 18px; right: 18px; padding: 12px; border-radius: 20px; }
+      .audience-floating-card img { width: 68px; height: 68px; border-radius: 16px; }
+      .audience-floating-card--top { top: auto; bottom: 166px; }
+      .audience-floating-card--bottom { bottom: 88px; width: calc(100% - 36px); }
+      .audience-stat-card { left: 18px; right: 18px; bottom: 304px; max-width: none; padding: 16px 16px 18px; }
+      .audience-mini-dock { left: 18px; right: 18px; bottom: 18px; grid-template-columns: 1fr; gap: 10px; }
+      .mini-dock-card { padding: 14px 16px; }
+      .audience-feature-card { padding: 20px; border-radius: 20px; }
+      .audience-feature-head { gap: 12px; }
+      .audience-feature-number { width: 42px; height: 42px; flex-basis: 42px; border-radius: 14px; font-size: 13px; }
+      .audience-feature-head strong { font-size: 18px; }
+      .audience-feature-head span { font-size: 12px; }
+      .audience-feature-card p { margin: 14px 0 0; }
+      .plans-grid { grid-template-columns:1fr; }
+      .plan-card.featured { order:-1; }
+      .cta-card { padding:40px 26px 340px; min-height:700px; align-items:flex-start; }
+      .cta-art { width:300px; height:470px; right:50%; transform:translateX(50%) rotate(7deg); bottom:-100px; }
+      .cta-ring { right:-80px; }
+      .footer-grid { grid-template-columns:1fr; gap:26px; }
+      .footer-bottom { flex-direction:column; align-items:flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+      .reveal, .reveal-left, .reveal-right { opacity:1; transform:none; }
+    }
+
+    /* Ajuste solicitado: serviços padronizados em linha horizontal */
+    .services-showcase {
+      display: flex;
+      align-items: stretch;
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 2px 20px;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 62, 139, .28) transparent;
+    }
+
+    .services-showcase::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .services-showcase::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .services-showcase::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(0, 62, 139, .24);
+    }
+
+    .services-showcase::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 62, 139, .38);
+    }
+
+    .services-showcase .service-card,
+    .services-showcase .service-card--wide,
+    .services-showcase .service-card--narrow {
+      flex: 0 0 360px;
+      width: 360px;
+      min-width: 360px;
+      min-height: 560px;
+      grid-column: auto;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .services-showcase .service-visual {
+      flex: 0 0 250px;
+      height: 250px;
+    }
+
+    .services-showcase .service-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .services-showcase .service-highlights {
+      margin-top: auto;
+      padding-top: 20px;
+    }
+
+    @media (max-width: 860px) {
+      .services-showcase {
+        display: flex;
+        grid-template-columns: none;
+      }
+
+      .services-showcase .service-card,
+      .services-showcase .service-card--wide,
+      .services-showcase .service-card--narrow {
+        flex-basis: 330px;
+        width: 330px;
+        min-width: 330px;
+        min-height: 540px;
+      }
+
+      .services-showcase .service-visual {
+        flex-basis: 235px;
+        height: 235px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .services-showcase {
+        gap: 14px;
+        margin-right: calc((100vw - var(--container)) / -2);
+        padding-right: 18px;
+      }
+
+      .services-showcase .service-card,
+      .services-showcase .service-card--wide,
+      .services-showcase .service-card--narrow {
+        flex-basis: min(86vw, 330px);
+        width: min(86vw, 330px);
+        min-width: min(86vw, 330px);
+        min-height: 540px;
+      }
+
+      .services-showcase .service-visual {
+        flex-basis: 235px;
+        height: 235px;
+      }
+    }
+
+
+    /* Ajuste solicitado: catálogo completo de planos com checks e indisponibilidades */
+    .plans .plan-list {
+      gap: 10px;
+    }
+
+    .plans .plan-list li {
+      align-items: flex-start;
+      min-height: 20px;
+    }
+
+    .plans .plan-list li::before {
+      flex: 0 0 15px;
+      width: 15px;
+      content: "✓";
+      color: var(--cyan-500);
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .plans .plan-list li.is-excluded {
+      opacity: .72;
+    }
+
+    .plans .plan-list li.is-excluded::before {
+      content: "×";
+      color: #ff3158;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .plans .plan-card.featured .plan-list li.is-excluded {
+      color: rgba(255,255,255,.58);
+    }
+
+    .plans .plan-card {
+      min-height: 100%;
+    }
+
+
+    /* Revisão de cores — seção "Feita para pessoas reais"
+       Objetivo: aumentar contraste no fundo claro sem alterar layout, copy ou tipografia. */
+    .audience {
+      background:
+        radial-gradient(circle at 10% 18%, rgba(32,213,233,.10), transparent 22%),
+        radial-gradient(circle at 88% 76%, rgba(0,62,139,.10), transparent 24%),
+        linear-gradient(180deg, #f8fbff 0%, #eef6fd 100%);
+    }
+
+    .audience .eyebrow {
+      color: var(--blue-800);
+    }
+
+    .audience .eyebrow::before {
+      background: var(--cyan-500);
+    }
+
+    .audience .title {
+      color: var(--blue-950);
+    }
+
+    .audience .accent {
+      color: var(--blue-700);
+    }
+
+    .audience .lead {
+      color: #4f6680;
+    }
+
+    .audience-bg-orb--one {
+      background: radial-gradient(circle, rgba(32,213,233,.16), rgba(32,213,233,0) 68%);
+    }
+
+    .audience-bg-orb--two {
+      background: radial-gradient(circle, rgba(0,62,139,.14), rgba(0,62,139,0) 70%);
+    }
+
+    .audience-stage-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(237,246,255,.96));
+      border-color: rgba(0,62,139,.14);
+      box-shadow: 0 28px 80px rgba(0,48,104,.13);
+    }
+
+    .audience-floating-card {
+      background: rgba(255,255,255,.97);
+      border-color: rgba(0,62,139,.12);
+      box-shadow: 0 20px 50px rgba(0,48,104,.16);
+    }
+
+    .audience-floating-card span {
+      color: var(--blue-700);
+    }
+
+    .mini-dock-card {
+      border-color: rgba(0,62,139,.12);
+      background: #ffffff;
+      box-shadow: 0 14px 30px rgba(0,48,104,.08);
+    }
+
+    .mini-dock-card b {
+      color: var(--blue-800);
+    }
+
+    .mini-dock-card span {
+      color: #536b84;
+    }
+
+    .audience-feature-card {
+      border-color: rgba(0,62,139,.14);
+      background: rgba(255,255,255,.98);
+      box-shadow: 0 14px 36px rgba(0,48,104,.08);
+    }
+
+    .audience-feature-card:hover {
+      border-color: rgba(0,82,168,.34);
+      box-shadow: 0 22px 48px rgba(0,48,104,.14);
+    }
+
+    .audience-feature-number {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue-800), var(--blue-700));
+      box-shadow: 0 12px 24px rgba(0,62,139,.22);
+    }
+
+    .audience-feature-head strong {
+      color: var(--blue-950);
+    }
+
+    .audience-feature-head span {
+      color: var(--blue-700);
+    }
+
+    .audience-feature-card p {
+      color: #536b84;
+    }
+
+
+    /* Revisão de cores — seção "Serviços inclusos"
+       Mantém o ciano de "planos Zoommed" e melhora o contraste dos demais elementos. */
+    .ecosystem {
+      background:
+        radial-gradient(circle at 88% 12%, rgba(32,213,233,.08), transparent 20%),
+        radial-gradient(circle at 8% 88%, rgba(0,62,139,.07), transparent 22%),
+        linear-gradient(180deg, #f4f9fe 0%, #eaf3fb 100%);
+    }
+
+    .ecosystem .eyebrow {
+      color: var(--blue-800);
+    }
+
+    .ecosystem .eyebrow::before {
+      background: var(--cyan-500);
+    }
+
+    .ecosystem .title {
+      color: var(--blue-950);
+    }
+
+    /* Mantém exatamente o destaque ciano solicitado em "planos Zoommed". */
+    .ecosystem .title .accent {
+      color: var(--cyan-500);
+    }
+
+    .ecosystem-head .lead {
+      color: #4f6680;
+    }
+
+    .ecosystem .service-card {
+      border-color: rgba(0,62,139,.14);
+      background: #ffffff;
+      box-shadow: 0 22px 64px rgba(0,48,104,.10);
+    }
+
+    .ecosystem .service-card:hover {
+      border-color: rgba(0,82,168,.24);
+      box-shadow: 0 30px 76px rgba(0,48,104,.16);
+    }
+
+    .ecosystem .service-kicker {
+      color: var(--blue-700);
+    }
+
+    .ecosystem .service-body h3 {
+      color: var(--blue-950);
+    }
+
+    .ecosystem .service-body p {
+      color: #536b84;
+    }
+
+    .ecosystem .service-number {
+      color: rgba(0,62,139,.15);
+    }
+
+    .ecosystem .service-highlights span {
+      color: var(--blue-800);
+      background: #edf5fc;
+      border-color: rgba(0,62,139,.14);
+    }
+
+    .ecosystem .service-symbol {
+      color: var(--blue-950);
+      background: var(--cyan-300);
+      border-color: rgba(255,255,255,.42);
+      box-shadow: 0 14px 30px rgba(0,43,98,.24);
+    }
+
+    .ecosystem .service-chip {
+      color: #ffffff;
+      background: rgba(0,43,98,.78);
+      border-color: rgba(255,255,255,.30);
+    }
+
+    .ecosystem .services-note {
+      color: #536b84;
+    }
+
+    .ecosystem .services-showcase {
+      scrollbar-color: rgba(0,62,139,.38) transparent;
+    }
+
+    .ecosystem .services-showcase::-webkit-scrollbar-thumb {
+      background: rgba(0,62,139,.34);
+    }
+
+    .ecosystem .services-showcase::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,62,139,.52);
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div id="site-root">
+
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="#inicio" aria-label="Zoommed — início">
+        <img src="data:image/png;base64,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" alt="Zoommed Consultas Online">
+      </a>
+
+      <nav class="desktop-nav" aria-label="Navegação principal">
+        <a href="#beneficios">Benefícios</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#especialidades">Especialidades</a>
+        <a href="#planos">Planos</a>
+        <a href="#duvidas">Dúvidas</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-primary" href="#planos">Consultar agora
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" aria-hidden="true">
+    <a href="#beneficios">Benefícios</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#especialidades">Especialidades</a>
+    <a href="#planos">Planos</a>
+    <a href="#duvidas">Dúvidas</a>
+    <a class="btn btn-primary" href="#planos">Assine agora</a>
+  </div>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow hero-reveal">Atendimento médico 24h, todos os dias</div>
+          <h1 class="hero-title hero-reveal">Seu médico a um <span>clique de distância.</span></h1>
+          <p class="hero-text hero-reveal">
+            Consulte-se com médicos de onde estiver, sem filas e com mais praticidade.
+            Uma assinatura de saúde digital para cuidar de você e da sua família.
+          </p>
+          <div class="hero-actions hero-reveal">
+            <a class="btn btn-primary" href="#planos">Conheça os planos
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="#como-funciona">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/></svg>
+              Veja como funciona
+            </a>
+          </div>
+          <div class="hero-proof hero-reveal">
+            <div class="proof-item"><i></i>Médicos com CRM ativo</div>
+            <div class="proof-item"><i></i>Clínico geral e especialistas</div>
+            <div class="proof-item"><i></i>Consulta por vídeo</div>
+          </div>
+        </div>
+
+        <div class="hero-visual" id="heroVisual">
+          <div class="human-card" data-depth="0.04">
+            <img src="./assets/images/img_3403a1944c.png" alt="Médica realizando atendimento online">
+            <div class="human-caption">
+            </div>
+          </div>
+
+          <div class="phone-wrap" data-depth="0.1">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="app-top">
+                  <span>zoommed</span>
+                  <div class="app-avatar"><img src="./assets/images/img_1e106499cb.png" alt=""></div>
+                </div>
+                <div class="app-body">
+                  <div class="app-greeting">Olá, seja bem-vindo(a)</div>
+                  <div class="app-title">Como podemos cuidar de você hoje?</div>
+                  <div class="doctor-call">
+                    <img src="./assets/images/img_6d5a44dd59.png" alt="Médico em atendimento">
+                    <div class="call-status">Dr. Rafael • online</div>
+                    <div class="call-dots"><b>◼</b><b>●</b></div>
+                  </div>
+                  <div class="app-quick">
+                    <div class="quick-card"><span>24h</span>Pronto atendimento</div>
+                    <div class="quick-card"><span>CRM</span>Médicos qualificados</div>
+                    <div class="quick-card"><span>+</span>Especialidades</div>
+                    <div class="quick-card"><span>Rx</span>Prescrição digital</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-badge badge-1" data-depth="0.15">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Atendimento 24h
+          </div>
+          <div class="floating-badge badge-2" data-depth="0.12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7 9 18l-5-5"/></svg>
+            Prescrição digital
+          </div>
+          <div class="floating-badge badge-3" data-depth="0.08">
+            <b>160</b>
+            médicos disponíveis
+          </div>
+        </div>
+      </div>
+  
+    </section>
+
+    <section class="trust-strip" aria-label="Diferenciais">
+      <div class="container trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon">24h</div>
+          <div><strong>Atendimento contínuo</strong><span>7 dias por semana</span></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">CRM</div>
+          <div><strong>Médicos qualificados</strong><span>Profissionais com registro ativo</span></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">▶</div>
+          <div><strong>Consulta por vídeo</strong><span>Direto pelo celular</span></div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon">R$</div>
+          <div><strong>Mais acessível</strong><span>Planos a partir de R$ 49,90</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section manifesto" id="beneficios">
+      <div class="container manifesto-grid">
+        <div class="manifesto-copy reveal-left">
+          <div class="eyebrow">A vida real acontece agora</div>
+          <h2 class="title">A saúde não espera o horário comercial.</h2>
+          <p class="lead">Quando surge uma dúvida, um sintoma inesperado ou a necessidade de orientação, ter acesso rápido a um médico muda tudo.</p>
+        </div>
+
+        <div class="scenario-list">
+          <article class="scenario reveal-right">
+            <span class="scenario-index">01</span>
+            <div>
+              <h3>Seu filho acordou com febre no meio da noite.</h3>
+              <p>Receba uma orientação médica sem sair de casa e sem enfrentar uma longa espera.</p>
+            </div>
+          </article>
+          <article class="scenario reveal-right">
+            <span class="scenario-index">02</span>
+            <div>
+              <h3>Um sintoma apareceu e você não sabe se deve se preocupar.</h3>
+              <p>Converse com um profissional e entenda qual é o próximo passo mais seguro.</p>
+            </div>
+          </article>
+          <article class="scenario reveal-right">
+            <span class="scenario-index">03</span>
+            <div>
+              <h3>Você precisa de atendimento, mas a agenda presencial não ajuda.</h3>
+              <p>Conte com uma alternativa digital, prática e disponível de onde você estiver.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how" id="como-funciona">
+      <div class="container">
+        <div class="how-head reveal">
+          <div class="eyebrow">Simples do início ao atendimento</div>
+          <h2 class="title">Cuidar da saúde pode ser mais <span class="accent">leve, rápido e conectado.</span></h2>
+          <p class="lead">A Zoommed transforma o acesso à telemedicina em uma jornada intuitiva — da escolha do plano à consulta com o(a) médico(a).</p>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-phone-stage">
+            <div class="how-device" id="howDevice">
+              <div class="how-screen">
+                <div class="screen-state active" data-screen="0">
+                  <div class="screen-kicker">Etapa 01</div>
+                  <div class="screen-title">Escolha o plano que combina com você.</div>
+                  <div class="screen-sub">Opções individuais e familiares para diferentes necessidades.</div>
+                  <div class="screen-panel">
+                    <div class="screen-plan"><b>Básico Individual</b><span>R$ 49,90</span></div>
+                    <div class="screen-plan active"><b>Básico Familiar</b><span>R$ 79,90</span></div>
+                    <div class="screen-plan"><b>Essencial</b><span>ver opções</span></div>
+                    <div class="fake-button">Continuar</div>
+                  </div>
+                </div>
+
+                <div class="screen-state" data-screen="1">
+                  <div class="screen-kicker">Etapa 02</div>
+                  <div class="screen-title">Acesse pelo celular.</div>
+                  <div class="screen-sub">Entre na plataforma e selecione o atendimento mais adequado.</div>
+                  <div class="doctor-list">
+                    <div class="doctor-row"><img src="./assets/images/img_db6fae0c81.png" alt=""><div><b>Pronto atendimento</b><small>Disponível agora</small></div></div>
+                    <div class="doctor-row"><img src="./assets/images/img_72f5ca79ba.png" alt=""><div><b>Clínico geral</b><small>Atendimento online</small></div></div>
+                    <div class="doctor-row"><img src="./assets/images/img_e72cc1f28e.png" alt=""><div><b>Especialistas</b><small>Consulte disponibilidade</small></div></div>
+                  </div>
+                </div>
+
+                <div class="screen-state" data-screen="2">
+                  <div class="screen-kicker">Etapa 03</div>
+                  <div class="screen-title">Fale com um médico por vídeo.</div>
+                  <div class="screen-sub">Conte o que está sentindo e receba orientação profissional.</div>
+                  <div class="video-frame">
+                    <img src="./assets/images/img_39cf6b3fac.png" alt="Médica em videochamada">
+                    <div class="video-note">Consulta em andamento</div>
+                    <div class="video-controls"><i></i><i></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step active" data-step="0">
+              <span class="step-number">01</span>
+              <h3>Escolha o plano ideal.</h3>
+              <p>Compare as opções da Zoommed e encontre uma assinatura adequada a sua necessidade.</p>
+              <ul><li>Planos individuais e familiares</li><li>Contratação online</li><li>Valor mensal acessível</li></ul>
+            </article>
+            <article class="step" data-step="1">
+              <span class="step-number">02</span>
+              <h3>Acesse de onde estiver.</h3>
+              <p>Use o celular para entrar na plataforma e solicitar o atendimento disponível para sua necessidade.</p>
+              <ul><li>Experiência digital simples</li><li>Acesso sem deslocamento</li><li>Atendimento em todo o Brasil</li></ul>
+            </article>
+            <article class="step" data-step="2">
+              <span class="step-number">03</span>
+              <h3>Converse com um médico.</h3>
+              <p>Realize sua consulta por vídeo com profissionais qualificados e receba orientações e documentos digitais quando aplicáveis.</p>
+              <ul><li>Médicos com CRM ativo</li><li>Vídeo consulta</li><li>Prescrição digital quando indicada</li></ul>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ecosystem" id="servicos-inclusos">
+      <div class="container">
+        <div class="ecosystem-head">
+          <div class="reveal-left">
+            <div class="eyebrow">Serviços inclusos</div>
+            <h2 class="title">Conheça os serviços inclusos nos <span class="accent">planos Zoommed.</span></h2>
+          </div>
+          <p class="lead reveal-right">Você escolhe o plano e a Zoommed amplia o cuidado com soluções que acompanham a saúde física, emocional e a rotina da sua família.</p>
+        </div>
+
+        <div class="services-showcase">
+          <article class="service-card service-card--wide reveal">
+            <div class="service-visual">
+              <img src="./assets/images/img_0f4efbf118.png" alt="Profissionais de saúde representando o serviço Total Care">
+              <div class="service-chip">Cuidado ampliado</div>
+              <div class="service-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.35-9.2-9.1C.9 7.82 3.1 4 7 4c2.2 0 3.7 1.2 5 3 1.3-1.8 2.8-3 5-3 3.9 0 6.1 3.82 4.2 7.9C19 16.65 12 21 12 21Z"/><path d="M8 12h2l1-3 2 6 1-3h2"/></svg>
+              </div>
+            </div>
+            <div class="service-body">
+              <span class="service-number">01</span>
+              <span class="service-kicker">Muito + especialistas</span>
+              <h3>Total Care</h3>
+              <p>Com a Total Care, você tem acesso a mais de 32 especialidades eletivas, com agendamento em até 15 dias.</p>
+              <div class="service-highlights">
+                <span>+32 especialidades</span>
+                <span>Agendamento em até 15 dias</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card service-card--narrow service-card--tech reveal">
+            <div class="service-visual">
+              <img src="./assets/images/img_eacb09555e.png" alt="Tecnologia aplicada ao monitoramento da saúde pelo VitaL Scan">
+              <div class="service-chip">Tecnologia de saúde</div>
+              <div class="service-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="11" r="3"/><path d="M7.5 18c.8-2.2 2.3-3.4 4.5-3.4s3.7 1.2 4.5 3.4"/></svg>
+              </div>
+            </div>
+            <div class="service-body">
+              <span class="service-number">02</span>
+              <span class="service-kicker">Monitoramento da sua saúde pelo olhar</span>
+              <h3>Vital Scan</h3>
+              <p>Uma tecnologia exclusiva que permite realizar escaneamento facial e acompanhar sinais vitais em segundos pelo celular.</p>
+              <div class="service-highlights">
+                <span>Escaneamento facial</span>
+                <span>Sinais vitais em segundos</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card service-card--narrow service-card--club reveal">
+            <div class="service-visual">
+              <img src="./assets/images/img_d690afe99f.png" alt="Família representando o Clube Zoommed">
+              <div class="service-chip">Economia e benefícios</div>
+              <div class="service-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 7v13"/><path d="M12 7H7.5A2.5 2.5 0 1 1 10 4.5C10 6 12 7 12 7Zm0 0h4.5A2.5 2.5 0 1 0 14 4.5C14 6 12 7 12 7Z"/></svg>
+              </div>
+            </div>
+            <div class="service-body">
+              <span class="service-number">03</span>
+              <span class="service-kicker">+ Vantagens</span>
+              <h3>Clube Zoommed</h3>
+              <p>Um clube exclusivo para assinantes Zoommed, com descontos em mais de 5.000 estabelecimentos, incluindo clínicas e laboratórios.</p>
+              <div class="service-highlights">
+                <span>+5.000 estabelecimentos</span>
+                <span>Clínicas e laboratórios</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="service-card service-card--wide service-card--mind reveal">
+            <div class="service-visual">
+              <img src="./assets/images/img_e9f5d0f08e.png" alt="Atendimento de assistência psicológica online">
+              <div class="service-chip">Saúde emocional</div>
+              <div class="service-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 4A5.5 5.5 0 0 0 4 9.5c0 2.3 1.4 4.3 3.4 5.1V20l4-3h3.1a5.5 5.5 0 1 0 0-11H9.5Z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>
+              </div>
+            </div>
+            <div class="service-body">
+              <span class="service-number">04</span>
+              <span class="service-kicker">Cuidado com a mente</span>
+              <h3>Assistência Psicológica</h3>
+              <p>Tenha acesso a terapias continuadas e suporte psicológico para você e seus familiares, com mais acolhimento e praticidade.</p>
+              <div class="service-highlights">
+                <span>Terapias continuadas</span>
+                <span>Apoio para a família</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <p class="services-note reveal">A disponibilidade dos serviços pode variar de acordo com o plano contratado e as respectivas condições de uso.</p>
+      </div>
+    </section>
+
+    <section class="section specialists" id="especialidades">
+      <div class="container">
+        <div class="reveal">
+          <div class="eyebrow">Especialistas para diferentes necessidades</div>
+          <h2 class="title">Da orientação inicial ao cuidado especializado.</h2>
+          <p class="lead">Tenha acesso a clínico geral e profissionais de diferentes áreas, conforme disponibilidade e condições do plano contratado.</p>
+        </div>
+      </div>
+
+      <div class="marquee" aria-label="Especialidades médicas">
+        <div class="marquee-track">
+          <span class="specialty-pill"><i></i>Clínico geral</span>
+          <span class="specialty-pill"><i></i>Pediatria</span>
+          <span class="specialty-pill"><i></i>Cardiologia</span>
+          <span class="specialty-pill"><i></i>Psiquiatria</span>
+          <span class="specialty-pill"><i></i>Pneumologia</span>
+          <span class="specialty-pill"><i></i>Ginecologia</span>
+          <span class="specialty-pill"><i></i>Nutrição</span>
+          <span class="specialty-pill"><i></i>Psicologia</span>
+          <span class="specialty-pill"><i></i>Endocrinologia</span>
+          <span class="specialty-pill"><i></i>Ortopedia</span>
+          <span class="specialty-pill"><i></i>Clínico geral</span>
+          <span class="specialty-pill"><i></i>Pediatria</span>
+          <span class="specialty-pill"><i></i>Cardiologia</span>
+          <span class="specialty-pill"><i></i>Psicologia</span>
+          <span class="specialty-pill"><i></i>Pneumologia</span>
+          <span class="specialty-pill"><i></i>Ginecologia</span>
+          <span class="specialty-pill"><i></i>Nutrição</span>
+          <span class="specialty-pill"><i></i>Psicologia</span>
+          <span class="specialty-pill"><i></i>Endocrinologia</span>
+          <span class="specialty-pill"><i></i>Ortopedia</span>
+        </div>
+      </div>
+
+      <div class="container doctor-grid">
+        <article class="doctor-card reveal">
+          <img src="./assets/images/img_1b4bbb04f6.png" alt="Médica sorrindo">
+          <div class="doctor-info"><strong>Atendimento humano</strong><span>Escuta, orientação e acolhimento</span></div>
+        </article>
+        <article class="doctor-card reveal">
+          <img src="./assets/images/img_d8b74aff3f.png" alt="Médico em consultório">
+          <div class="doctor-info"><strong>Profissionais qualificados</strong><span>Médicos com CRM ativo</span></div>
+        </article>
+        <article class="doctor-card reveal">
+          <img src="./assets/images/img_abbbef1967.png" alt="Profissional de saúde">
+          <div class="doctor-info"><strong>Cuidado conectado</strong><span>Saúde digital com mais proximidade</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section audience">
+      <div class="audience-bg-orb audience-bg-orb--one"></div>
+      <div class="audience-bg-orb audience-bg-orb--two"></div>
+
+      <div class="container audience-shell">
+        <div class="audience-intro reveal">
+          <div class="eyebrow">Feita para pessoas reais</div>
+          <h2 class="title">Mais acesso à saúde para <span class="accent">diferentes rotinas.</span></h2>
+          <p class="lead">A Zoommed aproxima o atendimento médico de quem busca mais praticidade, acolhimento e um preço mais acessível — sem abrir mão de conveniência no dia a dia.</p>
+        </div>
+
+        <div class="audience-grid audience-grid--new">
+          <div class="audience-stage reveal-left">
+            <div class="audience-stage-panel">
+              <div class="audience-stage-main">
+                <img src="./assets/images/img_86a7ea37d7.png" alt="Família usando tecnologia em casa">
+                <div class="audience-stage-overlay">
+                  <span class="audience-pill">Rotina familiar</span>
+                  <strong>Cuidado que se encaixa na vida real.</strong>
+                  <p>Atendimento prático para quem precisa resolver a saúde sem complicar a rotina.</p>
+                </div>
+              </div>
+
+              <div class="audience-floating-card audience-floating-card--top reveal">
+                <img src="./assets/images/img_63f9b74534.png" alt="Profissional em chamada de vídeo">
+                <div>
+                  <span>Consulta sem deslocamento</span>
+                  <strong>Mais praticidade para dias corridos</strong>
+                </div>
+              </div>
+           
+              <div class="audience-mini-dock">
+                <div class="mini-dock-card">
+                  <b>24h</b>
+                  <span>Atendimento contínuo</span>
+                </div>
+                <div class="mini-dock-card">
+                  <b>Online</b>
+                  <span>Sem sair de casa</span>
+                </div>
+                <div class="mini-dock-card">
+                  <b>Acessível</b>
+                  <span>Planos mensais</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="audience-copy audience-copy--new reveal-right">
+            <div class="audience-list audience-list--new">
+              <article class="audience-feature-card">
+                <div class="audience-feature-head">
+                  <div class="audience-feature-number">01</div>
+                  <div>
+                    <strong>Quem não possui plano de saúde tradicional</strong>
+                    <span>Uma alternativa digital para consultas e orientações.</span>
+                  </div>
+                </div>
+                <p>Para quem quer falar com um médico com mais praticidade, sem depender do custo elevado de uma consulta particular presencial.</p>
+              </article>
+
+              <article class="audience-feature-card">
+                <div class="audience-feature-head">
+                  <div class="audience-feature-number">02</div>
+                  <div>
+                    <strong>Famílias com crianças</strong>
+                    <span>Mais tranquilidade diante de sintomas inesperados.</span>
+                  </div>
+                </div>
+                <p>Uma solução conveniente para momentos em que a rapidez faz diferença, principalmente durante a noite ou em fins de semana.</p>
+              </article>
+
+              <article class="audience-feature-card">
+                <div class="audience-feature-head">
+                  <div class="audience-feature-number">03</div>
+                  <div>
+                    <strong>Pessoas com rotina corrida</strong>
+                    <span>Atendimento sem deslocamento e com mais flexibilidade.</span>
+                  </div>
+                </div>
+                <p>Ideal para quem precisa otimizar o tempo e resolver a saúde pelo celular, de casa, do trabalho ou de onde estiver.</p>
+              </article>
+
+              <article class="audience-feature-card">
+                <div class="audience-feature-head">
+                  <div class="audience-feature-number">04</div>
+                  <div>
+                    <strong>Quem busca economia</strong>
+                    <span>Planos mensais com valores acessíveis.</span>
+                  </div>
+                </div>
+                <p>Uma forma inteligente de ter acesso à saúde digital com previsibilidade de custo e mais possibilidades de cuidado no mês a mês.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section plans" id="planos">
+      <div class="container">
+        <div class="plans-head">
+          <div class="reveal-left">
+            <div class="eyebrow">Escolha o plano ideal</div>
+            <h2 class="title">Cuidado para você ou para a família.</h2>
+            <p class="lead">Planos recorrentes com acesso à saúde digital e atendimento médico online.</p>
+          </div>
+          <div class="plan-toggle reveal-right" role="group" aria-label="Filtrar planos">
+            <button class="toggle-btn active" data-filter="all">Todos</button>
+            <button class="toggle-btn" data-filter="individual">Individual</button>
+            <button class="toggle-btn" data-filter="familiar">Familiar</button>
+          </div>
+        </div>
+
+        <div class="plans-grid">
+          <article class="plan-card" data-category="individual">
+            <span class="plan-tag">Entrada</span>
+            <h3 class="plan-name">Básico Individual</h3>
+            <p class="plan-audience">Para uma pessoa</p>
+            <div class="price"><small>R$</small><strong>49,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-excluded">Clube+ Zoommed de Vantagens</li>
+              <li class="is-excluded">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card featured" data-category="familiar">
+            <span class="plan-tag">Mais escolhido</span>
+            <h3 class="plan-name">Básico Familiar</h3>
+            <p class="plan-audience">Para até 4 vidas</p>
+            <div class="price"><small>R$</small><strong>79,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-excluded">Clube+ Zoommed de Vantagens</li>
+              <li class="is-excluded">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn btn-primary" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="individual">
+            <span class="plan-tag">Essencial</span>
+            <h3 class="plan-name">Essencial Individual</h3>
+            <p class="plan-audience">Mais benefícios para uma pessoa</p>
+            <div class="price"><small>R$</small><strong>59,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-excluded">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="familiar">
+            <span class="plan-tag">Família</span>
+            <h3 class="plan-name">Essencial Familiar</h3>
+            <p class="plan-audience">Mais benefícios para a família</p>
+            <div class="price"><small>R$</small><strong>89,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-excluded">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="individual">
+            <span class="plan-tag">Completo</span>
+            <h3 class="plan-name">ZoomMaster Individual</h3>
+            <p class="plan-audience">Cuidado ampliado individual</p>
+<div class="price"><small>R$</small><strong>139,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-included">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="familiar">
+            <span class="plan-tag">Ampliado</span>
+            <h3 class="plan-name">ZoomMaster Familiar</h3>
+            <p class="plan-audience">Cuidado ampliado para a família</p>
+<div class="price"><small>R$</small><strong>199,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-included">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-excluded">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="familiar">
+            <span class="plan-tag">Premium</span>
+            <h3 class="plan-name">ZoomMaster Premium</h3>
+            <p class="plan-audience">Experiência premium familiar</p>
+<div class="price"><small>R$</small><strong>219,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-included">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-included">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-excluded">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+          <article class="plan-card" data-category="familiar">
+            <span class="plan-tag">Total Premium</span>
+            <h3 class="plan-name">ZoomMaster Total Premium</h3>
+            <p class="plan-audience">Cuidado completo para a família</p>
+<div class="price"><small>R$</small><strong>399,90</strong><span>/mês</span></div>
+            <ul class="plan-list">
+              <li class="is-included">Aplicativo Zoommed (Android/iOS)</li>
+              <li class="is-included">Acesso à Área de Membros Associados</li>
+              <li class="is-included">10 bônus exclusivos</li>
+              <li class="is-included">Consultas clínicas emergenciais ilimitadas</li>
+              <li class="is-included">Consultas eletivas ilimitadas em até 12 especialidades</li>
+              <li class="is-included">Sem carência e sem limite de idade</li>
+              <li class="is-included">Clube+ Zoommed de Vantagens</li>
+              <li class="is-included">Atendimento psicológico familiar: até 2 sessões mensais</li>
+              <li class="is-included">Vital Scan: 1 escaneamento facial diagnóstico ao mês</li>
+              <li class="is-included">Total Care: mais 32 especialidades eletivas com agendamento em até 15 dias</li>
+            </ul>
+            <a class="btn" href="#">Assinar plano</a>
+          </article>
+
+        </div>
+
+        <p class="plan-note">Valores e benefícios apresentados com base na página atual. Revise as condições comerciais e os links de contratação antes da publicação.</p>
+      </div>
+    </section>
+
+    <section class="section testimonials">
+      <div class="container testimonials-head reveal">
+        <div class="eyebrow">Experiências que aproximam</div>
+        <h2 class="title">O que os assinantes dizem</h2>
+        <p class="lead">Uma experiência digital eficiente também precisa ser humana, clara e acolhedora.</p>
+      </div>
+
+      <div class="testimonial-track">
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“Consegui falar com um médico à noite sem sair de casa. O atendimento foi rápido e muito atencioso.”</p>
+          <div class="person"><img src="./assets/images/img_94417144db.png" alt=""><div><strong>Mariana S.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“O acesso pelo celular facilitou muito. Foi uma solução prática em um momento em que eu precisava de orientação.”</p>
+          <div class="person"><img src="./assets/images/img_5ef836b3a8.png" alt=""><div><strong>Rafael M.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“Tenho filhos pequenos e saber que existe atendimento disponível 24 horas traz muito mais tranquilidade.”</p>
+          <div class="person"><img src="./assets/images/img_40da1dc786.png" alt=""><div><strong>Carla A.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“O plano tem um valor acessível e o atendimento foi muito mais simples do que eu imaginava.”</p>
+          <div class="person"><img src="./assets/images/img_8f48e36eb1.png" alt=""><div><strong>Bruno T.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“Consegui falar com um médico à noite sem sair de casa. O atendimento foi rápido e muito atencioso.”</p>
+          <div class="person"><img src="./assets/images/img_94417144db.png" alt=""><div><strong>Mariana S.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“O acesso pelo celular facilitou muito. Foi uma solução prática em um momento em que eu precisava de orientação.”</p>
+          <div class="person"><img src="./assets/images/img_5ef836b3a8.png" alt=""><div><strong>Rafael M.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“Tenho filhos pequenos e saber que existe atendimento disponível 24 horas traz muito mais tranquilidade.”</p>
+          <div class="person"><img src="./assets/images/img_40da1dc786.png" alt=""><div><strong>Carla A.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+        <article class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>“O plano tem um valor acessível e o atendimento foi muito mais simples do que eu imaginava.”</p>
+          <div class="person"><img src="./assets/images/img_8f48e36eb1.png" alt=""><div><strong>Bruno T.</strong><span>Assinante Zoommed</span></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section faq" id="duvidas">
+      <div class="container faq-grid">
+        <div class="faq-copy reveal-left">
+          <div class="eyebrow">Perguntas frequentes</div>
+          <h2 class="title">Tire suas dúvidas.</h2>
+          <p class="lead">Informações claras ajudam o visitante a tomar uma decisão com mais segurança.</p>
+        </div>
+
+        <div class="faq-list reveal-right">
+          <details open>
+            <summary>O que é a Zoommed?</summary>
+            <div class="faq-answer">A Zoommed é um serviço de assinatura de saúde digital que oferece acesso a consultas de telemedicina por meio de uma plataforma online.</div>
+          </details>
+          <details>
+            <summary>O atendimento funciona 24 horas?</summary>
+            <div class="faq-answer">O pronto atendimento médico é apresentado como disponível 24 horas por dia, 7 dias por semana. Especialidades podem seguir regras próprias de agenda e disponibilidade.</div>
+          </details>
+          <details>
+            <summary>Como acontece a consulta?</summary>
+            <div class="faq-answer">O atendimento é realizado online, geralmente por vídeo, utilizando o celular ou outro dispositivo compatível com internet.</div>
+          </details>
+          <details>
+            <summary>Os médicos possuem CRM?</summary>
+            <div class="faq-answer">A Zoommed informa que os atendimentos são realizados por médicos com CRM ativo.</div>
+          </details>
+          <details>
+            <summary>Posso receber receita ou documento digital?</summary>
+            <div class="faq-answer">Quando houver indicação clínica e estiver de acordo com as normas aplicáveis, o profissional poderá emitir documentos médicos digitais.</div>
+          </details>
+          <details>
+            <summary>A Zoommed substitui um pronto-socorro?</summary>
+            <div class="faq-answer">Não. Em situações de emergência, risco de vida, dor intensa, falta de ar importante, perda de consciência ou outros sinais graves, procure imediatamente o serviço de emergência da sua região.</div>
+          </details>
+          <details>
+            <summary>A Zoommed é um plano de saúde tradicional?</summary>
+            <div class="faq-answer">A comunicação deve deixar claro o enquadramento jurídico e comercial correto do serviço. Esta versão utiliza “assinatura de saúde digital” e “telemedicina” para evitar confusão com plano de saúde tradicional.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="container">
+        <div class="cta-card reveal">
+          <div class="cta-ring"></div>
+          <div class="cta-copy">
+            <div class="eyebrow" style="color:var(--cyan-300)">Seu cuidado começa agora</div>
+            <h2 class="title">Cuidado médico não deveria depender de hora, lugar ou fila.</h2>
+            <p>Tenha uma alternativa digital para falar com médicos, receber orientação e cuidar melhor de quem importa.</p>
+            <a class="btn btn-primary" href="#planos">Conhecer os planos
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <div class="cta-art" aria-hidden="true">
+            <div class="how-device">
+              <div class="how-screen">
+                <div class="screen-state active">
+                  <div class="screen-kicker">Zoommed</div>
+                  <div class="screen-title">Um médico mais perto de você.</div>
+                  <div class="screen-sub">Atendimento online para cuidar da saúde com praticidade.</div>
+                  <div class="video-frame">
+                    <img src="./assets/images/img_c4b0f4f8bb.png" alt="">
+                    <div class="video-note">Médico disponível</div>
+                    <div class="video-controls"><i></i><i></i></div>
+                  </div>
+                  <div class="fake-button">Iniciar atendimento</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="data:image/png;base64,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" alt="Zoommed">
+        <p>Assinatura de saúde digital com atendimento médico online, feita para ampliar o acesso ao cuidado no Brasil.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Zoommed</h4>
+        <a href="#beneficios">Benefícios</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#especialidades">Especialidades</a>
+        <a href="#planos">Planos</a>
+      </div>
+      <div class="footer-col">
+        <h4>Atendimento</h4>
+        <span>24 horas por dia</span>
+        <span>7 dias por semana</span>
+        <span>Consultas por vídeo</span>
+        <span>Médicos com CRM ativo</span>
+      </div>
+      <div class="footer-col">
+        <h4>Informações</h4>
+        <a href="#">Termos de uso</a>
+        <a href="#">Política de privacidade</a>
+        <a href="#duvidas">Perguntas frequentes</a>
+        <a href="#">Fale conosco</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2026 Zoommed. Todos os direitos reservados.</span>
+      <span>Telemedicina não substitui atendimento presencial ou emergencial quando necessário.</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Mobile menu
+      const menuButton = document.querySelector(".menu-toggle");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const mobileLinks = mobileMenu.querySelectorAll("a");
+
+      function setMenu(open) {
+        mobileMenu.classList.toggle("open", open);
+        document.body.classList.toggle("menu-open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        mobileMenu.setAttribute("aria-hidden", String(!open));
+      }
+      menuButton.addEventListener("click", () => setMenu(!mobileMenu.classList.contains("open")));
+      mobileLinks.forEach(link => link.addEventListener("click", () => setMenu(false)));
+
+      // Smooth scroll
+      let lenis;
+      if (!reducedMotion && window.Lenis) {
+        lenis = new Lenis({ duration: 1.05, smoothWheel: true, wheelMultiplier: .9 });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+      }
+
+      // Scroll progress
+      const progress = document.querySelector(".scroll-progress");
+      function updateProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+        progress.style.transform = `scaleX(${ratio})`;
+      }
+      updateProgress();
+      window.addEventListener("scroll", updateProgress, { passive: true });
+
+      // Hero parallax
+      const heroVisual = document.getElementById("heroVisual");
+      if (heroVisual && !reducedMotion && window.innerWidth > 860) {
+        heroVisual.addEventListener("mousemove", (event) => {
+          const rect = heroVisual.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - .5;
+          const y = (event.clientY - rect.top) / rect.height - .5;
+          heroVisual.querySelectorAll("[data-depth]").forEach(el => {
+            const depth = Number(el.dataset.depth || .05);
+            el.style.translate = `${x * depth * 180}px ${y * depth * 180}px`;
+          });
+        });
+        heroVisual.addEventListener("mouseleave", () => {
+          heroVisual.querySelectorAll("[data-depth]").forEach(el => el.style.removeProperty("translate"));
+        });
+      }
+
+      // Pricing filter
+      const filterButtons = document.querySelectorAll(".toggle-btn");
+      const planCards = document.querySelectorAll(".plan-card");
+      filterButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach(btn => btn.classList.remove("active"));
+          button.classList.add("active");
+          const filter = button.dataset.filter;
+          planCards.forEach(card => {
+            const visible = filter === "all" || card.dataset.category === filter;
+            card.style.display = visible ? "flex" : "none";
+          });
+          if (window.ScrollTrigger) ScrollTrigger.refresh();
+        });
+      });
+
+      if (window.gsap && window.ScrollTrigger && !reducedMotion) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from(".hero-reveal", {
+          opacity: 0,
+          y: 34,
+          duration: 1,
+          stagger: .13,
+          ease: "power3.out",
+          delay: .15
+        });
+        gsap.from(".hero-visual", {
+          opacity: 0,
+          x: 70,
+          rotateY: -7,
+          duration: 1.35,
+          ease: "power3.out",
+          delay: .35
+        });
+
+        gsap.to(".orb-1", {
+          yPercent: 18,
+          xPercent: -8,
+          scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+        });
+        gsap.to(".phone-wrap", {
+          y: 90,
+          rotate: 3,
+          scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        document.querySelectorAll(".reveal").forEach(el => {
+          gsap.to(el, {
+            opacity: 1, y: 0, duration: .9, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true }
+          });
+        });
+        document.querySelectorAll(".reveal-left").forEach(el => {
+          gsap.to(el, {
+            opacity: 1, x: 0, duration: .95, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true }
+          });
+        });
+        document.querySelectorAll(".reveal-right").forEach(el => {
+          gsap.to(el, {
+            opacity: 1, x: 0, duration: .95, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true }
+          });
+        });
+
+        // How-it-works synchronized phone
+        const steps = gsap.utils.toArray(".step");
+        const screens = gsap.utils.toArray(".screen-state[data-screen]");
+        const device = document.getElementById("howDevice");
+
+        steps.forEach((step, index) => {
+          ScrollTrigger.create({
+            trigger: step,
+            start: "top 48%",
+            end: "bottom 48%",
+            onEnter: () => activateStep(index),
+            onEnterBack: () => activateStep(index)
+          });
+        });
+
+        function activateStep(index) {
+          steps.forEach((el, i) => el.classList.toggle("active", i === index));
+          screens.forEach((el, i) => el.classList.toggle("active", i === index));
+          if (device) {
+            const transforms = [
+              "rotateY(-10deg) rotateX(3deg)",
+              "rotateY(8deg) rotateX(-2deg)",
+              "rotateY(-4deg) rotateX(2deg)"
+            ];
+            device.style.transform = transforms[index];
+          }
+        }
+
+        gsap.to(".audience-stamp", {
+          rotate: 360,
+          ease: "none",
+          scrollTrigger: { trigger: ".audience", start: "top bottom", end: "bottom top", scrub: 1.3 }
+        });
+
+        gsap.to(".cta-art", {
+          y: -70,
+          rotate: 4,
+          scrollTrigger: { trigger: ".final-cta", start: "top bottom", end: "bottom bottom", scrub: 1 }
+        });
+      } else {
+        document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach(el => {
+          el.style.opacity = 1;
+          el.style.transform = "none";
+        });
+      }
+
+      // Add a soft 3D tilt to cards
+      if (!reducedMotion && window.innerWidth > 860) {
+        document.querySelectorAll(".bento-card, .service-card, .plan-card").forEach(card => {
+          card.addEventListener("mousemove", e => {
+            const rect = card.getBoundingClientRect();
+            const px = (e.clientX - rect.left) / rect.width - .5;
+            const py = (e.clientY - rect.top) / rect.height - .5;
+            card.style.transform = `perspective(900px) rotateX(${-py * 4}deg) rotateY(${px * 4}deg) translateY(-4px)`;
+          });
+          card.addEventListener("mouseleave", () => card.style.removeProperty("transform"));
+        });
+      }
+    });
+  </script>
+  </div>
+  <div id="react-root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
