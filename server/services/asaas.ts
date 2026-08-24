@@ -1,8 +1,29 @@
 import axios from 'axios';
 
 const getAsaasClient = () => {
-  const apiKey = process.env.ASAAS_API_KEY || '';
-  const baseURL = process.env.ASAAS_API_URL || 'https://api.asaas.com/v3';
+  let apiKey = (process.env.ASAAS_API_KEY || '').trim();
+  let baseURL = (process.env.ASAAS_API_URL || 'https://api-sandbox.asaas.com/v3').trim();
+
+  // If apiKey was truncated by shell expansion ($aact_hmlg stripped), restore $aact_hmlg prefix if key starts with _
+  if (apiKey.startsWith('_') && !apiKey.startsWith('$aact_')) {
+    apiKey = `$aact_hmlg${apiKey}`;
+  }
+
+  // Detect if key is a sandbox key
+  const isSandboxKey = apiKey.includes('hmlg') || apiKey.startsWith('$aact_hmlg_');
+
+  // Fallback to sandbox URL if using sandbox key with default prod url
+  if (!baseURL || (isSandboxKey && (baseURL === 'https://api.asaas.com' || baseURL === 'https://api.asaas.com/v3'))) {
+    baseURL = 'https://api-sandbox.asaas.com/v3';
+  }
+
+  // Ensure trailing slashes are removed and /v3 is appended
+  baseURL = baseURL.replace(/\/+$/, '');
+  if (!baseURL.endsWith('/v3')) {
+    baseURL = `${baseURL}/v3`;
+  }
+
+  console.log(`🔌 Initializing Asaas Client (BaseURL: ${baseURL}, Key Prefix: ${apiKey.substring(0, 15)}...)`);
 
   return axios.create({
     baseURL,
@@ -80,14 +101,16 @@ export class AsaasService {
 
     try {
       // 1. Check if customer already exists
+      console.log(`🔍 Searching customer in Asaas by CPF/CNPJ: ${cleanCpfCnpj}`);
       const searchRes = await client.get(`/customers?cpfCnpj=${cleanCpfCnpj}`);
       if (searchRes.data && searchRes.data.data && searchRes.data.data.length > 0) {
         const existingId = searchRes.data.data[0].id;
-        // Optionally update customer data if needed
+        console.log(`✅ Customer found in Asaas: ${existingId}`);
         return existingId;
       }
 
       // 2. Create customer if not found
+      console.log(`➕ Creating new customer in Asaas for: ${input.name} (${cleanCpfCnpj})`);
       const createRes = await client.post('/customers', {
         name: input.name,
         cpfCnpj: cleanCpfCnpj,
@@ -101,12 +124,14 @@ export class AsaasService {
         province: input.province,
       });
 
+      console.log(`✅ Customer created successfully in Asaas: ${createRes.data.id}`);
       return createRes.data.id;
     } catch (error: any) {
-      console.error('Error in Asaas getOrCreateCustomer:', error?.response?.data || error.message);
+      const errDetails = error?.response?.data || error.message;
+      console.error('❌ Error in Asaas getOrCreateCustomer:', JSON.stringify(errDetails, null, 2));
+      const firstErrorMsg = error?.response?.data?.errors?.[0]?.description;
       throw new Error(
-        error?.response?.data?.errors?.[0]?.description ||
-          'Falha ao cadastrar/localizar cliente no Asaas.'
+        firstErrorMsg || `Falha ao cadastrar/localizar cliente no Asaas (${error.message}).`
       );
     }
   }
@@ -129,71 +154,57 @@ export class AsaasService {
 
       const paymentId = paymentRes.data.id;
 
-      // Get PIX QR Code details
-      const qrCodeRes = await client.get(`/payments/${paymentId}/pixQrCode`);
+      // Get PIX QR Code & CopyPaste payload
+      const qrRes = await client.get(`/payments/${paymentId}/pixQrCode`);
 
       return {
         paymentId,
         customerId,
-        status: paymentRes.data.status,
         value: paymentRes.data.value,
+        status: paymentRes.data.status,
         dueDate: paymentRes.data.dueDate,
-        encodedImage: qrCodeRes.data.encodedImage,
-        payload: qrCodeRes.data.payload,
-        expirationDate: qrCodeRes.data.expirationDate,
+        encodedImage: qrRes.data.encodedImage, // Base64 QR Code image
+        payload: qrRes.data.payload, // PIX copia e cola string
+        expirationDate: qrRes.data.expirationDate,
       };
     } catch (error: any) {
-      console.error('Error in Asaas createPixCharge:', error?.response?.data || error.message);
-      throw new Error(
-        error?.response?.data?.errors?.[0]?.description || 'Falha ao gerar cobrança PIX no Asaas.'
-      );
+      console.error('❌ Error in Asaas createPixCharge:', error?.response?.data || error.message);
+      const firstErrorMsg = error?.response?.data?.errors?.[0]?.description;
+      throw new Error(firstErrorMsg || 'Falha ao gerar cobrança PIX no Asaas.');
     }
   }
 
   /**
-   * Create a transparent Credit Card charge
+   * Create a Credit Card subscription/charge
    */
   static async createCreditCardCharge(input: CreditCardCheckoutInput) {
     const client = getAsaasClient();
     const customerId = await this.getOrCreateCustomer(input.customer);
 
     try {
-      const paymentRes = await client.post('/payments', {
+      const payload = {
         customer: customerId,
         billingType: 'CREDIT_CARD',
         value: input.value,
         dueDate: new Date().toISOString().split('T')[0],
         description: input.description || `Assinatura Zoommed - ${input.planName}`,
-        creditCard: {
-          holderName: input.creditCard.holderName,
-          number: input.creditCard.number.replace(/\D/g, ''),
-          expiryMonth: input.creditCard.expiryMonth,
-          expiryYear: input.creditCard.expiryYear,
-          ccv: input.creditCard.ccv,
-        },
-        creditCardHolderInfo: {
-          name: input.creditCardHolderInfo.name,
-          email: input.creditCardHolderInfo.email,
-          cpfCnpj: input.creditCardHolderInfo.cpfCnpj.replace(/\D/g, ''),
-          postalCode: input.creditCardHolderInfo.postalCode.replace(/\D/g, ''),
-          addressNumber: input.creditCardHolderInfo.addressNumber,
-          addressComplement: input.creditCardHolderInfo.addressComplement,
-          phone: input.creditCardHolderInfo.phone.replace(/\D/g, ''),
-        },
-      });
+        creditCard: input.creditCard,
+        creditCardHolderInfo: input.creditCardHolderInfo,
+      };
+
+      const res = await client.post('/payments', payload);
 
       return {
-        paymentId: paymentRes.data.id,
+        paymentId: res.data.id,
         customerId,
-        status: paymentRes.data.status,
-        value: paymentRes.data.value,
-        invoiceUrl: paymentRes.data.invoiceUrl,
+        value: res.data.value,
+        status: res.data.status,
+        invoiceUrl: res.data.invoiceUrl,
       };
     } catch (error: any) {
-      console.error('Error in Asaas createCreditCardCharge:', error?.response?.data || error.message);
-      throw new Error(
-        error?.response?.data?.errors?.[0]?.description || 'Falha ao processar cartão de crédito no Asaas.'
-      );
+      console.error('❌ Error in Asaas createCreditCardCharge:', error?.response?.data || error.message);
+      const firstErrorMsg = error?.response?.data?.errors?.[0]?.description;
+      throw new Error(firstErrorMsg || 'Falha ao processar pagamento com cartão no Asaas.');
     }
   }
 
@@ -205,36 +216,36 @@ export class AsaasService {
     const customerId = await this.getOrCreateCustomer(input.customer);
 
     try {
-      const paymentRes = await client.post('/payments', {
+      const res = await client.post('/payments', {
         customer: customerId,
         billingType: 'BOLETO',
         value: input.value,
-        dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        dueDate: new Date().toISOString().split('T')[0],
         description: input.description || `Assinatura Zoommed - ${input.planName}`,
       });
 
-      const paymentId = paymentRes.data.id;
-      const identificationFieldRes = await client.get(`/payments/${paymentId}/identificationField`);
+      const paymentId = res.data.id;
+      const bankSlipRes = await client.get(`/payments/${paymentId}/identificationField`);
 
       return {
         paymentId,
         customerId,
-        status: paymentRes.data.status,
-        value: paymentRes.data.value,
-        dueDate: paymentRes.data.dueDate,
-        bankSlipUrl: paymentRes.data.bankSlipUrl,
-        identificationField: identificationFieldRes.data.identificationField,
+        value: res.data.value,
+        status: res.data.status,
+        dueDate: res.data.dueDate || new Date().toISOString().split('T')[0],
+        bankSlipUrl: res.data.bankSlipUrl,
+        identificationField: bankSlipRes.data.identificationField, // Linha digitável do boleto
+        invoiceUrl: res.data.invoiceUrl,
       };
     } catch (error: any) {
-      console.error('Error in Asaas createBoletoCharge:', error?.response?.data || error.message);
-      throw new Error(
-        error?.response?.data?.errors?.[0]?.description || 'Falha ao gerar boleto bancário no Asaas.'
-      );
+      console.error('❌ Error in Asaas createBoletoCharge:', error?.response?.data || error.message);
+      const firstErrorMsg = error?.response?.data?.errors?.[0]?.description;
+      throw new Error(firstErrorMsg || 'Falha ao gerar boleto no Asaas.');
     }
   }
 
   /**
-   * Get Live Payment Status
+   * Check status of a payment in Asaas
    */
   static async getPaymentStatus(paymentId: string) {
     const client = getAsaasClient();
@@ -243,15 +254,14 @@ export class AsaasService {
       return {
         id: res.data.id,
         customerId: res.data.customer,
-        status: res.data.status,
-        confirmedDate: res.data.confirmedDate,
-        paymentDate: res.data.paymentDate,
+        status: res.data.status, // PENDING, RECEIVED, CONFIRMED, OVERDUE, etc.
         value: res.data.value,
-        dueDate: res.data.dueDate,
+        dueDate: res.data.dueDate || new Date().toISOString().split('T')[0],
+        confirmedDate: res.data.confirmedDate,
       };
     } catch (error: any) {
-      console.error('Error fetching payment status:', error?.response?.data || error.message);
-      throw new Error('Pagamento não encontrado.');
+      console.error('❌ Error fetching payment status from Asaas:', error?.response?.data || error.message);
+      throw new Error('Falha ao consultar status do pagamento.');
     }
   }
 }
