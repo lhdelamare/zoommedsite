@@ -207,6 +207,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
         planName: plan.name,
         value: plan.price,
         dependents,
+        productType: plan.product_type,
+        isSubscription: plan.product_type !== 'consultation',
       };
 
       if (paymentMethod === 'CREDIT_CARD') {

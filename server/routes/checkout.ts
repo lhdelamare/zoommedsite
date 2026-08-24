@@ -99,7 +99,7 @@ router.post('/pix', async (req: Request, res: Response) => {
 // 2. Process Credit Card Transparent Checkout
 router.post('/creditcard', async (req: Request, res: Response) => {
   try {
-    const { customer, planName, value, creditCard, creditCardHolderInfo, description, dependents } = req.body;
+    const { customer, planName, value, creditCard, creditCardHolderInfo, description, dependents, isSubscription, productType } = req.body;
 
     if (!customer || !customer.name || !customer.cpfCnpj || !customer.email || !customer.birthDate) {
       return res.status(400).json({ error: 'Dados do cliente incompletos (Data de nascimento obrigatória).' });
@@ -109,21 +109,39 @@ router.post('/creditcard', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Dados do cartão de crédito incompletos.' });
     }
 
-    const cardData = await AsaasService.createCreditCardCharge({
-      customer,
-      planName: planName || 'Plano Zoommed',
-      value: Number(value),
-      creditCard,
-      creditCardHolderInfo: creditCardHolderInfo || {
-        name: creditCard.holderName,
-        email: customer.email,
-        cpfCnpj: customer.cpfCnpj,
-        postalCode: customer.postalCode || '00000000',
-        addressNumber: customer.addressNumber || 'S/N',
-        phone: customer.mobilePhone || customer.phone || '11999999999',
-      },
-      description,
-    });
+    const isRecurrentPlan = isSubscription !== false && productType !== 'consultation';
+
+    const cardHolderInfo = creditCardHolderInfo || {
+      name: creditCard.holderName,
+      email: customer.email,
+      cpfCnpj: customer.cpfCnpj,
+      postalCode: customer.postalCode || '00000000',
+      addressNumber: customer.addressNumber || 'S/N',
+      phone: customer.mobilePhone || customer.phone || '11999999999',
+    };
+
+    let cardData: any;
+    if (isRecurrentPlan) {
+      // Monthly recurring subscription (/subscriptions)
+      cardData = await AsaasService.createSubscription({
+        customer,
+        planName: planName || 'Plano Zoommed',
+        value: Number(value),
+        creditCard,
+        creditCardHolderInfo: cardHolderInfo,
+        description: description || `Assinatura Mensal - ${planName}`,
+      });
+    } else {
+      // 1-time single consultation charge (/payments)
+      cardData = await AsaasService.createCreditCardCharge({
+        customer,
+        planName: planName || 'Consulta Avulsa',
+        value: Number(value),
+        creditCard,
+        creditCardHolderInfo: cardHolderInfo,
+        description: description || `Consulta Avulsa - ${planName}`,
+      });
+    }
 
     // Background sync with Supabase backoffice DB
     syncPurchaseToSupabase({
@@ -132,6 +150,7 @@ router.post('/creditcard', async (req: Request, res: Response) => {
       planName: planName || 'Plano Zoommed',
       value: Number(value),
       paymentId: cardData.paymentId,
+      subscriptionId: cardData.subscriptionId,
       billingType: 'CREDIT_CARD',
       status: cardData.status || 'CONFIRMED',
       dueDate: new Date().toISOString().split('T')[0],

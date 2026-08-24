@@ -175,7 +175,44 @@ export class AsaasService {
   }
 
   /**
-   * Create a Credit Card subscription/charge
+   * Create a Monthly Recurrent Subscription in Asaas (/subscriptions)
+   */
+  static async createSubscription(input: CreditCardCheckoutInput) {
+    const client = getAsaasClient();
+    const customerId = await this.getOrCreateCustomer(input.customer);
+
+    try {
+      const payload = {
+        customer: customerId,
+        billingType: 'CREDIT_CARD',
+        value: input.value,
+        nextDueDate: new Date().toISOString().split('T')[0],
+        cycle: 'MONTHLY',
+        description: input.description || `Assinatura Mensal Zoommed - ${input.planName}`,
+        creditCard: input.creditCard,
+        creditCardHolderInfo: input.creditCardHolderInfo,
+      };
+
+      console.log(`💳 Creating Monthly Subscription in Asaas for customer ${customerId}...`);
+      const res = await client.post('/subscriptions', payload);
+
+      return {
+        subscriptionId: res.data.id,
+        paymentId: res.data.id,
+        customerId,
+        value: res.data.value,
+        status: res.data.status || 'ACTIVE',
+        cycle: res.data.cycle || 'MONTHLY',
+      };
+    } catch (error: any) {
+      console.error('❌ Error in Asaas createSubscription:', error?.response?.data || error.message);
+      const firstErrorMsg = error?.response?.data?.errors?.[0]?.description;
+      throw new Error(firstErrorMsg || 'Falha ao criar assinatura mensal no Asaas.');
+    }
+  }
+
+  /**
+   * Create a Credit Card single payment/charge
    */
   static async createCreditCardCharge(input: CreditCardCheckoutInput) {
     const client = getAsaasClient();
