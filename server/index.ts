@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import checkoutRouter from './routes/checkout.js';
 import productsRouter from './routes/products.js';
@@ -26,19 +27,28 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Serve frontend production build if available
-const distPath = path.join(__dirname, '../../dist');
+// Resolve frontend production build path with fallbacks
+let distPath = path.join(__dirname, '../../dist');
+if (!fs.existsSync(path.join(distPath, 'index.html'))) {
+  distPath = path.join(__dirname, '../dist');
+}
+if (!fs.existsSync(path.join(distPath, 'index.html'))) {
+  distPath = path.join(process.cwd(), 'dist');
+}
+
+console.log(`📁 Serving static dist files from: ${distPath}`);
+
 app.use(express.static(distPath));
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) {
     return next();
   }
-  res.sendFile(path.join(distPath, 'index.html'), (err) => {
-    if (err) {
-      next();
-    }
-  });
+  const indexPath = path.join(distPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  res.status(404).send('Index HTML not found');
 });
 
 app.listen(PORT, () => {
