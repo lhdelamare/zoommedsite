@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import checkoutRouter from './routes/checkout.js';
+import productsRouter from './routes/products.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // API Routes
 app.use('/api/checkout', checkoutRouter);
+app.use('/api/products', productsRouter);
 
 // Healthcheck
 app.get('/api/health', (req, res) => {
@@ -41,5 +43,5 @@ app.get('*', (req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Zoommed Server rodando na porta ${PORT}`);
-  console.log(`👉 Environment Asaas API: ${process.env.ASAAS_API_URL || 'https://sandbox.asaas.com/api/v3'}`);
+  console.log(`👉 Environment Asaas API: ${process.env.ASAAS_API_URL || 'https://api.asaas.com/v3'}`);
 });

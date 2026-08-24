@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getAsaasClient = () => {
   const apiKey = process.env.ASAAS_API_KEY || '';
-  const baseURL = process.env.ASAAS_API_URL || 'https://sandbox.asaas.com/api/v3';
+  const baseURL = process.env.ASAAS_API_URL || 'https://api.asaas.com/v3';
 
   return axios.create({
     baseURL,
@@ -82,7 +82,9 @@ export class AsaasService {
       // 1. Check if customer already exists
       const searchRes = await client.get(`/customers?cpfCnpj=${cleanCpfCnpj}`);
       if (searchRes.data && searchRes.data.data && searchRes.data.data.length > 0) {
-        return searchRes.data.data[0].id;
+        const existingId = searchRes.data.data[0].id;
+        // Optionally update customer data if needed
+        return existingId;
       }
 
       // 2. Create customer if not found
@@ -117,7 +119,6 @@ export class AsaasService {
     const customerId = await this.getOrCreateCustomer(input.customer);
 
     try {
-      // Create single charge or subscription for PIX
       const paymentRes = await client.post('/payments', {
         customer: customerId,
         billingType: 'PIX',
@@ -133,6 +134,7 @@ export class AsaasService {
 
       return {
         paymentId,
+        customerId,
         status: paymentRes.data.status,
         value: paymentRes.data.value,
         dueDate: paymentRes.data.dueDate,
@@ -182,6 +184,7 @@ export class AsaasService {
 
       return {
         paymentId: paymentRes.data.id,
+        customerId,
         status: paymentRes.data.status,
         value: paymentRes.data.value,
         invoiceUrl: paymentRes.data.invoiceUrl,
@@ -215,6 +218,7 @@ export class AsaasService {
 
       return {
         paymentId,
+        customerId,
         status: paymentRes.data.status,
         value: paymentRes.data.value,
         dueDate: paymentRes.data.dueDate,
@@ -238,10 +242,12 @@ export class AsaasService {
       const res = await client.get(`/payments/${paymentId}`);
       return {
         id: res.data.id,
+        customerId: res.data.customer,
         status: res.data.status,
         confirmedDate: res.data.confirmedDate,
         paymentDate: res.data.paymentDate,
         value: res.data.value,
+        dueDate: res.data.dueDate,
       };
     } catch (error: any) {
       console.error('Error fetching payment status:', error?.response?.data || error.message);

@@ -1,10 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, QrCode, CreditCard, FileText, CheckCircle2, AlertCircle, Copy, Download, Loader2, ShieldCheck, Lock } from 'lucide-react';
+import {
+  ArrowLeft,
+  QrCode,
+  CreditCard,
+  FileText,
+  CheckCircle2,
+  AlertCircle,
+  Copy,
+  Download,
+  Loader2,
+  ShieldCheck,
+  Lock,
+  UserPlus,
+  Trash2,
+  Users,
+} from 'lucide-react';
 
 export interface PlanData {
+  id?: number;
   name: string;
   price: number;
   period: string;
+  max_dependents?: number;
+  product_type?: string;
+  has_benefits_club?: boolean;
+  match_identifier?: string;
 }
 
 interface CheckoutPageProps {
@@ -13,6 +33,12 @@ interface CheckoutPageProps {
 }
 
 type PaymentMethod = 'PIX' | 'CREDIT_CARD' | 'BOLETO';
+
+export interface Dependent {
+  name: string;
+  cpf: string;
+  birthDate: string;
+}
 
 export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('PIX');
@@ -39,6 +65,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
     state: '',
   });
 
+  // Dependents Form State
+  const maxDependents = plan.max_dependents || 0;
+  const [dependents, setDependents] = useState<Dependent[]>([]);
+
   // Credit Card Form State
   const [creditCard, setCreditCard] = useState({
     holderName: '',
@@ -63,6 +93,32 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     (e.target as HTMLInputElement).setCustomValidity('');
+  };
+
+  // Helper mask for CPF/CNPJ
+  const formatCpfCnpj = (val: string) => {
+    const clean = val.replace(/\D/g, '');
+    if (clean.length <= 11) {
+      return clean
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+    return clean
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2')
+      .substring(0, 18);
+  };
+
+  // Helper mask for Phone
+  const formatPhone = (val: string) => {
+    const clean = val.replace(/\D/g, '');
+    if (clean.length <= 10) {
+      return clean.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return clean.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2').substring(0, 15);
   };
 
   const handleCepChange = async (value: string) => {
@@ -95,7 +151,24 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
     setCreditCard((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Poll for payment confirmation if PIX or Boleto created
+  // Dependent Handlers
+  const addDependent = () => {
+    if (dependents.length < maxDependents) {
+      setDependents([...dependents, { name: '', cpf: '', birthDate: '' }]);
+    }
+  };
+
+  const removeDependent = (index: number) => {
+    setDependents(dependents.filter((_, i) => i !== index));
+  };
+
+  const handleDependentChange = (index: number, field: keyof Dependent, value: string) => {
+    const updated = [...dependents];
+    updated[index] = { ...updated[index], [field]: value };
+    setDependents(updated);
+  };
+
+  // Poll for payment status
   useEffect(() => {
     let interval: any = null;
 
@@ -133,6 +206,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
         customer,
         planName: plan.name,
         value: plan.price,
+        dependents,
       };
 
       if (paymentMethod === 'CREDIT_CARD') {
@@ -183,7 +257,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
 
   return (
     <div style={pageWrapperStyle}>
-      {/* Top Bar Navigation */}
+      {/* Header Bar */}
       <header style={headerStyle}>
         <div style={headerContentStyle}>
           <button onClick={onBack} style={backButtonStyle}>
@@ -198,7 +272,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main style={mainContentStyle}>
         <div style={layoutGridStyle}>
           {/* Left Column: Checkout Form */}
@@ -225,7 +299,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                     <CheckCircle2 size={72} color="#10b981" style={{ margin: '0 auto 16px' }} />
                     <h3 style={{ fontSize: '24px', color: '#001d42', marginBottom: '8px' }}>Pagamento Confirmado!</h3>
                     <p style={{ color: '#5e738b', margin: '0 0 24px' }}>
-                      Sua assinatura do plano <strong>{plan.name}</strong> foi ativada com sucesso.
+                      Sua assinatura do plano <strong>{plan.name}</strong> foi ativada com sucesso no sistema.
                     </p>
                     <button onClick={onBack} style={primaryButtonStyle}>
                       Voltar à página inicial
@@ -310,11 +384,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
             {!successData && (
               <form onSubmit={handleSubmit}>
                 <h3 style={{ margin: '0 0 16px', color: '#001d42', fontSize: '17px', fontWeight: 700 }}>
-                  1. Dados do Assinante
+                  1. Dados do Assinante Titular
                 </h3>
 
                 <div style={formGridStyle}>
-                  <div>
+                  <div style={{ gridColumn: '1 / -1' }}>
                     <label style={labelStyle}>Nome Completo *</label>
                     <input
                       type="text"
@@ -350,7 +424,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                       onInput={handleInput}
                       placeholder="000.000.000-00"
                       value={customer.cpfCnpj}
-                      onChange={(e) => handleInputChange('cpfCnpj', e.target.value)}
+                      onChange={(e) => handleInputChange('cpfCnpj', formatCpfCnpj(e.target.value))}
                       style={inputStyle}
                     />
                   </div>
@@ -378,7 +452,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                       onInput={handleInput}
                       placeholder="(11) 99999-9999"
                       value={customer.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      onChange={(e) => handleInputChange('phone', formatPhone(e.target.value))}
                       style={inputStyle}
                     />
                   </div>
@@ -464,10 +538,113 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                   </div>
                 </div>
 
+                {/* Dependent Registration Section if max_dependents > 0 */}
+                {maxDependents > 0 && (
+                  <>
+                    <hr style={{ border: 'none', borderTop: '1px solid #e2e8f0', margin: '32px 0 24px' }} />
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <div>
+                        <h3 style={{ margin: 0, color: '#001d42', fontSize: '17px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Users size={20} color="#0752a8" />
+                          <span>2. Dependentes (Até {maxDependents} incluídos)</span>
+                        </h3>
+                        <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '13px' }}>
+                          Adicione os familiares que farão parte do seu plano.
+                        </p>
+                      </div>
+
+                      {dependents.length < maxDependents && (
+                        <button
+                          type="button"
+                          onClick={addDependent}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            background: '#e0f2fe',
+                            color: '#0369a1',
+                            border: 'none',
+                            padding: '8px 14px',
+                            borderRadius: '10px',
+                            fontWeight: 700,
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <UserPlus size={16} /> Adicionar Dependente
+                        </button>
+                      )}
+                    </div>
+
+                    {dependents.length === 0 ? (
+                      <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center', border: '1px dashed #cbd5e1', color: '#64748b', fontSize: '14px' }}>
+                        Nenhum dependente adicionado ainda. Você pode adicionar até {maxDependents} dependentes agora ou posteriormente no portal.
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {dependents.map((dep, idx) => (
+                          <div key={idx} style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1px solid #e2e8f0', position: 'relative' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', alignItems: 'center' }}>
+                              <span style={{ fontWeight: 700, fontSize: '14px', color: '#001d42' }}>
+                                Dependente #{idx + 1}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => removeDependent(idx)}
+                                style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600 }}
+                              >
+                                <Trash2 size={14} /> Remover
+                              </button>
+                            </div>
+
+                            <div style={formGridStyle}>
+                              <div style={{ gridColumn: '1 / -1' }}>
+                                <label style={labelStyle}>Nome Completo do Dependente *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="Nome do dependente"
+                                  value={dep.name}
+                                  onChange={(e) => handleDependentChange(idx, 'name', e.target.value)}
+                                  style={inputStyle}
+                                />
+                              </div>
+
+                              <div>
+                                <label style={labelStyle}>CPF do Dependente *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="000.000.000-00"
+                                  value={dep.cpf}
+                                  onChange={(e) => handleDependentChange(idx, 'cpf', formatCpfCnpj(e.target.value))}
+                                  style={inputStyle}
+                                />
+                              </div>
+
+                              <div>
+                                <label style={labelStyle}>Data de Nascimento *</label>
+                                <input
+                                  type="date"
+                                  required
+                                  value={dep.birthDate}
+                                  onChange={(e) => handleDependentChange(idx, 'birthDate', e.target.value)}
+                                  style={inputStyle}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+
                 <hr style={{ border: 'none', borderTop: '1px solid #e2e8f0', margin: '32px 0 24px' }} />
 
                 <h3 style={{ margin: '0 0 16px', color: '#001d42', fontSize: '17px', fontWeight: 700 }}>
-                  2. Forma de Pagamento
+                  {maxDependents > 0 ? '3' : '2'}. Forma de Pagamento
                 </h3>
 
                 <div style={paymentSelectorGridStyle}>
@@ -615,6 +792,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
                   <ShieldCheck size={18} color="#10b981" />
                   <span>Receitas e atestados digitais</span>
                 </div>
+                {maxDependents > 0 && (
+                  <div style={featureRowStyle}>
+                    <ShieldCheck size={18} color="#10b981" />
+                    <span>Inclusão de até {maxDependents} dependentes</span>
+                  </div>
+                )}
                 <div style={featureRowStyle}>
                   <ShieldCheck size={18} color="#10b981" />
                   <span>Cancelamento fácil a qualquer momento</span>
