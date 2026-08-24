@@ -24,9 +24,8 @@ ENV PORT=3001
 COPY package*.json ./
 RUN npm ci --only=production
 
-# Copy built dist files from builder stage
+# Copy built dist directory from builder stage
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/assets ./dist/assets
 
 EXPOSE 3001
 
