@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const supabaseUrl = process.env.SUPABASE_URL || 'https://udptgogeyyobegosptqg.supabase.co';
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_publishable_kUuGN3B02YEOr4hjN_dzlg_Pch394_j';
 
-if (!supabaseUrl || !supabaseServiceRoleKey) {
-  console.warn('⚠️ Warning: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are not set in environment variables.');
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.warn('⚠️ Warning: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not found in process.env, using default staging URL.');
 }
 
 // Service Role Supabase client to bypass RLS for backend operations
